@@ -35,9 +35,19 @@ const AddTask = ({ data, addCard }) => {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
-	const [validCardTitleValue, setvalidCardTitleValue] = React.useState(true);
-	const cardTitleValueRef = useRef('');
-	const cardStateRef = useRef('');
+	const [validCardTitleValue, setvalidCardTitleValue] =
+		React.useState('pending');
+
+	const defaultStatusValue = 'pending';
+	const [status, setStatus] = React.useState(defaultStatusValue);
+	const cardTitleValueRef = useRef();
+	const cardDateValueRef = useRef();
+	const cardDescValueRef = useRef();
+
+	const updateStatus = (e, val) => {
+		setStatus(val);
+	};
+
 	return (
 		<div display='block'>
 			<Button variant='contained' onClick={handleOpen}>
@@ -71,22 +81,22 @@ const AddTask = ({ data, addCard }) => {
 						sx={{ my: '1rem' }}
 						label='Description'
 						type='text'
-						//inputRef={colTitleValueRef}
+						inputRef={cardDescValueRef}
 					/>
 					<FormControl component='fieldset'>
 						<FormLabel component='legend'>Status</FormLabel>
 						<RadioGroup
-							inputRef={cardStateRef}
 							row
 							aria-label='status'
 							name='row-radio-buttons-group'
+							onChange={updateStatus}
+							defaultValue={defaultStatusValue}
 						>
 							<FormControlLabel
 								value='pending'
 								control={<Radio />}
 								label='Pending'
 							/>
-
 							<FormControlLabel
 								value='progress'
 								control={<Radio />}
@@ -105,6 +115,7 @@ const AddTask = ({ data, addCard }) => {
 						label='Birthday'
 						type='date'
 						defaultValue='2017-05-24'
+						inputRef={cardDateValueRef}
 						sx={{ width: 220, my: '1rem' }}
 					/>
 					<Button
@@ -120,9 +131,9 @@ const AddTask = ({ data, addCard }) => {
 							addCard(
 								data.id,
 								cardTitleValueRef.current.value,
-								'Card description',
-								'2020-11-11',
-								'Done'
+								cardDescValueRef.current.value,
+								cardDateValueRef.current.value,
+								status
 							);
 							handleClose();
 						}}
