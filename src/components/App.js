@@ -34,7 +34,28 @@ function App() {
 		const index = tmpColumns[columnId].cards.findIndex(
 			(item) => item.id === cardId
 		);
+		console.log(cardId);
+		console.log(index);
 		index > -1 && tmpColumns[columnId].cards.splice(index, 1);
+		setColumns(tmpColumns);
+	};
+
+	const cardColSwitch = (oldColId, newColId, cardId) => {
+		let tmpColumns = columns.slice();
+		// finding the card
+		const index = tmpColumns[oldColId].cards.findIndex(
+			(item) => item.id === cardId
+		);
+		//
+		console.log(tmpColumns[oldColId]);
+		console.log(oldColId);
+		console.log(newColId);
+		console.log(cardId);
+
+		console.log(index);
+		tmpColumns[newColId].cards.push(tmpColumns[oldColId].cards[index]);
+		tmpColumns[oldColId].cards.splice(index, 1);
+		//console.log(tmpColumns);
 		setColumns(tmpColumns);
 	};
 
@@ -42,7 +63,12 @@ function App() {
 		<Grid container alignItems='center' justifyContent='center'>
 			<Grid item container xs={10} alignItems='center' justifyContent='center'>
 				<Header addColumn={addColumn} />
-				<Board columns={columns} addCard={addCard} removeCard={removeCard} />
+				<Board
+					columns={columns}
+					addCard={addCard}
+					removeCard={removeCard}
+					cardColSwitch={cardColSwitch}
+				/>
 			</Grid>
 		</Grid>
 	);
