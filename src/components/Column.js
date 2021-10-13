@@ -1,7 +1,8 @@
-import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import Task from './Task';
 import AddTask from './modals/AddTask';
+import { Droppable } from 'react-beautiful-dnd';
+import { useState, useEffect } from 'react';
 
 const Column = ({ addCard, removeCard, cardColSwitch, data }) => {
 	const removeCardAddColId = (cardId) => {
@@ -9,13 +10,14 @@ const Column = ({ addCard, removeCard, cardColSwitch, data }) => {
 	};
 
 	const renderCards = () => {
-		return data.cards.map((item) => {
+		return data.cards.map((item, index) => {
 			return (
 				<Task
 					data={item}
 					key={item.id}
 					removeCard={removeCardAddColId}
 					colId={data.id}
+					index={index}
 				/>
 			);
 		});
@@ -34,22 +36,28 @@ const Column = ({ addCard, removeCard, cardColSwitch, data }) => {
 	};
 
 	return (
-		<Grid
-			onDrop={dropCard}
-			onDragOver={dragOverCard}
-			item
-			xs={6}
-			md={6}
-			lg={3}
-			xl={2}
-			sx={{ padding: '1rem' }}
-		>
-			<Typography variant='h4' align='center'>
-				{data.title}
-			</Typography>
-			<AddTask addCard={addCard} data={data} />
-			{renderCards()}
-		</Grid>
+		<Droppable droppableId={data.id + 'droppable'}>
+			{(provided, snapshot) => (
+				<Grid
+					ref={provided.innerRef}
+					{...provided.droppableProps}
+					item
+					xs={6}
+					md={6}
+					lg={3}
+					xl={2}
+					sx={{ padding: '1rem' }}
+				>
+					<Typography variant='h4' align='center'>
+						{data.title}
+					</Typography>
+					<AddTask addCard={addCard} data={data} />
+
+					{renderCards()}
+					{provided.placeholder}
+				</Grid>
+			)}
+		</Droppable>
 	);
 };
 
