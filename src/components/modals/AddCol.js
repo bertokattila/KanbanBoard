@@ -4,8 +4,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useRef } from 'react';
+import AddIcon from '@mui/icons-material/Add';
 
-import { TextField } from '@mui/material';
+import { TextField, Fab } from '@mui/material';
 
 const style = {
 	position: 'absolute',
@@ -30,9 +31,15 @@ const AddCol = ({ addColumn }) => {
 	const colTitleValueRef = useRef('');
 	return (
 		<div>
-			<Button variant='outlined' color='secondary' onClick={handleOpen}>
+			<Fab
+				variant='extended'
+				aria-label='add'
+				onClick={handleOpen}
+				color='secondary'
+			>
+				<AddIcon />
 				New Column
-			</Button>
+			</Fab>
 			<Modal
 				open={open}
 				onClose={handleClose}

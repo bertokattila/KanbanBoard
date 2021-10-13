@@ -39,7 +39,9 @@ const Column = ({ data, addCard, removeCard, cardColSwitch }) => {
 			onDrop={dropCard}
 			onDragOver={dragOverCard}
 			item
-			xs={4}
+			xs={6}
+			md={4}
+			lg={2}
 			sx={{ padding: '1rem' }}
 		>
 			<Typography variant='h4' align='center'>

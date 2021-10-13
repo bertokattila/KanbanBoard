@@ -17,16 +17,27 @@ const Task = ({ data, removeCard, colId }) => {
 		<Card
 			draggable='true'
 			onDragStart={dragStart}
-			sx={{ minWidth: 275, marginTop: '1rem', cursor: 'pointer' }}
+			sx={{
+				maxWidth: '100%',
+				marginTop: '1rem',
+				cursor: 'pointer',
+			}}
 		>
 			<CardContent>
 				<Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
 					{data.state}
 				</Typography>
-				<Typography variant='h5' component='div'>
+				<Typography
+					variant='h5'
+					component='div'
+					sx={{ wordBreak: 'break-all' }}
+				>
 					{data.title}
 				</Typography>
-				<Typography sx={{ mb: 1.5 }} color='text.secondary'>
+				<Typography
+					sx={{ mb: 1.5, wordBreak: 'break-all' }}
+					color='text.secondary'
+				>
 					{data.description}
 				</Typography>
 				<Typography variant='body2'>{data.deadline}</Typography>
