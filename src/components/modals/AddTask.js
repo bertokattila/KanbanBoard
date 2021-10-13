@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useRef } from 'react';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns';
 
 import {
 	TextField,
@@ -111,9 +112,8 @@ const AddTask = ({ data, addCard }) => {
 					</FormControl>
 					<TextField
 						id='date'
-						label='Birthday'
 						type='date'
-						defaultValue='2017-05-24'
+						defaultValue={format(new Date(), 'yyyy-MM-dd')}
 						inputRef={cardDateValueRef}
 						sx={{ width: 220, my: '1rem' }}
 					/>

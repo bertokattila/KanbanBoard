@@ -1,5 +1,4 @@
 import { Grid } from '@mui/material';
-import { useState } from 'react';
 import Column from './Column';
 
 const Board = ({ columns, addCard, removeCard, cardColSwitch }) => {

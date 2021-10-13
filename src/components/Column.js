@@ -1,10 +1,9 @@
 import React from 'react';
-import { Grid, Button, Typography } from '@mui/material';
-import { bgcolor } from '@mui/system';
+import { Grid, Typography } from '@mui/material';
 import Task from './Task';
 import AddTask from './modals/AddTask';
 
-const Column = ({ data, addCard, removeCard, cardColSwitch }) => {
+const Column = ({ addCard, removeCard, cardColSwitch, data }) => {
 	const removeCardAddColId = (cardId) => {
 		removeCard(data.id, cardId);
 	};
@@ -40,8 +39,9 @@ const Column = ({ data, addCard, removeCard, cardColSwitch }) => {
 			onDragOver={dragOverCard}
 			item
 			xs={6}
-			md={4}
-			lg={2}
+			md={6}
+			lg={3}
+			xl={2}
 			sx={{ padding: '1rem' }}
 		>
 			<Typography variant='h4' align='center'>

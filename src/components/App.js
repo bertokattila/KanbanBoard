@@ -47,12 +47,7 @@ function App() {
 			(item) => item.id === cardId
 		);
 		//
-		console.log(tmpColumns[oldColId]);
-		console.log(oldColId);
-		console.log(newColId);
-		console.log(cardId);
 
-		console.log(index);
 		tmpColumns[newColId].cards.push(tmpColumns[oldColId].cards[index]);
 		tmpColumns[oldColId].cards.splice(index, 1);
 		//console.log(tmpColumns);
