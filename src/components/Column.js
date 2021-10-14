@@ -36,28 +36,21 @@ const Column = ({ addCard, removeCard, cardColSwitch, data }) => {
 	};
 
 	return (
-		<Droppable droppableId={data.id + 'droppable'}>
-			{(provided, snapshot) => (
-				<Grid
-					ref={provided.innerRef}
-					{...provided.droppableProps}
-					item
-					xs={6}
-					md={6}
-					lg={3}
-					xl={2}
-					sx={{ padding: '1rem' }}
-				>
-					<Typography variant='h4' align='center'>
-						{data.title}
-					</Typography>
-					<AddTask addCard={addCard} data={data} />
+		<Grid item xs={6} md={6} lg={3} xl={2} sx={{ padding: '1rem' }}>
+			<Typography variant='h4' align='center'>
+				{data.title}
+			</Typography>
+			<AddTask addCard={addCard} data={data} />
 
-					{renderCards()}
-					{provided.placeholder}
-				</Grid>
-			)}
-		</Droppable>
+			<Droppable droppableId={data.id.toString()}>
+				{(provided, snapshot) => (
+					<div ref={provided.innerRef} {...provided.droppableProps}>
+						{renderCards()}
+						{provided.placeholder}
+					</div>
+				)}
+			</Droppable>
+		</Grid>
 	);
 };
 

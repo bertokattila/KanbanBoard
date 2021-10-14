@@ -2,10 +2,11 @@ import { Grid } from '@mui/material';
 import Board from './Board';
 import Header from './Header';
 import { useState } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 function App() {
 	const [columns, setColumns] = useState([]);
-	const [uId, setUid] = useState(0); // only temporary until no server side is available
+	const [, setUid] = useState(0); // only temporary until no server side is available
 
 	const addColumn = (title) => {
 		let tmpColumns = columns.slice();
@@ -18,7 +19,7 @@ function App() {
 			let tmpColumns = columns.slice();
 			tmpColumns[columnId].cards.push({
 				columnId: columnId,
-				id: uId,
+				id: prev,
 				title: title,
 				description: description,
 				deadline: deadline,
@@ -34,38 +35,51 @@ function App() {
 		const index = tmpColumns[columnId].cards.findIndex(
 			(item) => item.id === cardId
 		);
-		console.log(cardId);
-		console.log(index);
 		index > -1 && tmpColumns[columnId].cards.splice(index, 1);
 		setColumns(tmpColumns);
 	};
 
-	const cardColSwitch = (oldColId, newColId, cardId) => {
+	const cardColSwitch = (result) => {
+		if (!result.destination) {
+			return;
+		}
+		const oldColId = parseInt(result.source.droppableId);
+		const newColId = parseInt(result.destination.droppableId);
+		const cardId = parseInt(result.draggableId);
+
 		let tmpColumns = columns.slice();
 		// finding the card
 		const index = tmpColumns[oldColId].cards.findIndex(
 			(item) => item.id === cardId
 		);
-		//
 
-		tmpColumns[newColId].cards.push(tmpColumns[oldColId].cards[index]);
+		const tmpCard = tmpColumns[oldColId].cards[index];
 		tmpColumns[oldColId].cards.splice(index, 1);
-		//console.log(tmpColumns);
+		tmpColumns[newColId].cards.splice(result.destination.index, 0, tmpCard);
+
 		setColumns(tmpColumns);
 	};
 
 	return (
-		<Grid container alignItems='center' justifyContent='center'>
-			<Grid item container xs={10} alignItems='center' justifyContent='center'>
-				<Header addColumn={addColumn} />
-				<Board
-					columns={columns}
-					addCard={addCard}
-					removeCard={removeCard}
-					cardColSwitch={cardColSwitch}
-				/>
+		<DragDropContext onDragEnd={cardColSwitch}>
+			<Grid container alignItems='center' justifyContent='center'>
+				<Grid
+					item
+					container
+					xs={10}
+					alignItems='center'
+					justifyContent='center'
+				>
+					<Header addColumn={addColumn} />
+					<Board
+						columns={columns}
+						addCard={addCard}
+						removeCard={removeCard}
+						cardColSwitch={cardColSwitch}
+					/>
+				</Grid>
 			</Grid>
-		</Grid>
+		</DragDropContext>
 	);
 }
 

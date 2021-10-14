@@ -15,7 +15,7 @@ const Task = ({ data, removeCard, colId, index }) => {
 	};
 
 	return (
-		<Draggable key={data.id} draggableId={data.id + 'draggable'} index={index}>
+		<Draggable key={data.id} draggableId={data.id.toString()} index={index}>
 			{(provided) => (
 				<Card
 					{...provided.draggableProps}
