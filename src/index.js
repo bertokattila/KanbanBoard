@@ -14,7 +14,6 @@ ReactDOM.render(
 	<ThemeProvider theme={darkTheme}>
 		<LocalizationProvider dateAdapter={DateAdapter}>
 			<CssBaseline />
-
 			<App />
 		</LocalizationProvider>
 	</ThemeProvider>,

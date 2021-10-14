@@ -62,7 +62,7 @@ const AddTask = ({ data, addCard }) => {
 					<Typography
 						id='modal-modal-title'
 						variant='h5'
-						sx={{ mb: '1rem', padding: 0 }}
+						sx={{ mb: '1rem', mt: '1rem' }}
 					>
 						Add new Card
 					</Typography>
