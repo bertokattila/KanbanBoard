@@ -9,11 +9,6 @@ import {
 import { Draggable } from 'react-beautiful-dnd';
 
 const Task = ({ data, removeCard, colId, index }) => {
-	const dragStart = (e) => {
-		e.dataTransfer.setData('colId', colId);
-		e.dataTransfer.setData('id', data.id);
-	};
-
 	return (
 		<Draggable key={data.id} draggableId={data.id.toString()} index={index}>
 			{(provided) => (
@@ -24,7 +19,6 @@ const Task = ({ data, removeCard, colId, index }) => {
 					sx={{
 						maxWidth: '100%',
 						marginTop: '1rem',
-						cursor: 'pointer',
 					}}
 				>
 					<CardContent>
