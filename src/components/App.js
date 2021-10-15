@@ -7,17 +7,22 @@ import { DragDropContext } from 'react-beautiful-dnd';
 function App() {
 	const [columns, setColumns] = useState([]);
 	const [, setUid] = useState(0); // only temporary until no server side is available
+	const [, setColId] = useState(0); // only temporary until no server side is available
 
 	const addColumn = (title) => {
-		let tmpColumns = columns.slice();
-		tmpColumns.push({ id: columns.length, title: title, cards: [] });
-		setColumns(tmpColumns);
+		setColId((prev) => {
+			let tmpColumns = columns.slice();
+			tmpColumns.push({ id: prev, title: title, cards: [] });
+			setColumns(tmpColumns);
+			return prev + 1;
+		});
 	};
 
 	const addCard = (columnId, title, description, deadline, state) => {
 		setUid((prev) => {
 			let tmpColumns = columns.slice();
-			tmpColumns[columnId].cards.push({
+			const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
+			tmpColumns[colIndex].cards.push({
 				columnId: columnId,
 				id: prev,
 				title: title,
@@ -32,24 +37,33 @@ function App() {
 
 	const editCard = (columnId, cardId, title, description, deadline, state) => {
 		let tmpColumns = columns.slice();
-		const index = tmpColumns[columnId].cards.findIndex(
+		const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
+		const index = tmpColumns[colIndex].cards.findIndex(
 			(item) => item.id === cardId
 		);
 		if (index > -1) {
-			tmpColumns[columnId].cards[index].title = title;
-			tmpColumns[columnId].cards[index].description = description;
-			tmpColumns[columnId].cards[index].deadline = deadline;
-			tmpColumns[columnId].cards[index].state = state;
+			tmpColumns[colIndex].cards[index].title = title;
+			tmpColumns[colIndex].cards[index].description = description;
+			tmpColumns[colIndex].cards[index].deadline = deadline;
+			tmpColumns[colIndex].cards[index].state = state;
 		}
 		setColumns(tmpColumns);
 	};
 
 	const removeCard = (columnId, cardId) => {
 		let tmpColumns = columns.slice();
-		const index = tmpColumns[columnId].cards.findIndex(
+		const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
+		const index = tmpColumns[colIndex].cards.findIndex(
 			(item) => item.id === cardId
 		);
-		index > -1 && tmpColumns[columnId].cards.splice(index, 1);
+		index > -1 && tmpColumns[colIndex].cards.splice(index, 1);
+		setColumns(tmpColumns);
+	};
+
+	const removeCol = (columnId) => {
+		let tmpColumns = columns.slice();
+		const index = tmpColumns.findIndex((item) => item.id === columnId);
+		tmpColumns.splice(index, 1);
 		setColumns(tmpColumns);
 	};
 
@@ -62,14 +76,18 @@ function App() {
 		const cardId = parseInt(result.draggableId);
 
 		let tmpColumns = columns.slice();
+
+		const oldColIndex = tmpColumns.findIndex((item) => item.id === oldColId);
+		const newColIndex = tmpColumns.findIndex((item) => item.id === newColId);
+
 		// finding the card
-		const index = tmpColumns[oldColId].cards.findIndex(
+		const index = tmpColumns[oldColIndex].cards.findIndex(
 			(item) => item.id === cardId
 		);
 
-		const tmpCard = tmpColumns[oldColId].cards[index];
-		tmpColumns[oldColId].cards.splice(index, 1);
-		tmpColumns[newColId].cards.splice(result.destination.index, 0, tmpCard);
+		const tmpCard = tmpColumns[oldColIndex].cards[index];
+		tmpColumns[oldColIndex].cards.splice(index, 1);
+		tmpColumns[newColIndex].cards.splice(result.destination.index, 0, tmpCard);
 
 		setColumns(tmpColumns);
 	};
@@ -90,6 +108,7 @@ function App() {
 						addCard={addCard}
 						removeCard={removeCard}
 						editCard={editCard}
+						removeCol={removeCol}
 					/>
 				</Grid>
 			</Grid>

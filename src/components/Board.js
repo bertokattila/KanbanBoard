@@ -1,7 +1,14 @@
 import { Grid } from '@mui/material';
 import Column from './Column';
 
-const Board = ({ columns, addCard, removeCard, cardColSwitch, editCard }) => {
+const Board = ({
+	columns,
+	addCard,
+	removeCard,
+	cardColSwitch,
+	editCard,
+	removeCol,
+}) => {
 	const renderColumns = () => {
 		return columns.map((item, key) => {
 			return (
@@ -12,6 +19,7 @@ const Board = ({ columns, addCard, removeCard, cardColSwitch, editCard }) => {
 					removeCard={removeCard}
 					cardColSwitch={cardColSwitch}
 					editCard={editCard}
+					removeCol={removeCol}
 				/>
 			);
 		});

@@ -4,7 +4,13 @@ import AddCol from './modals/AddCol';
 
 const Header = ({ addColumn }) => {
 	return (
-		<Grid item xs={12} container direction='column'>
+		<Grid
+			item
+			xs={12}
+			container
+			direction='column'
+			sx={{ marginBottom: '1rem' }}
+		>
 			<Grid item>
 				<Typography
 					variant='h2'

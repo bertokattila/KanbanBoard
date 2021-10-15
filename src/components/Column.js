@@ -1,9 +1,10 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Button } from '@mui/material';
 import Task from './Task';
 import AddTask from './modals/AddTask';
 import { Droppable } from 'react-beautiful-dnd';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-const Column = ({ addCard, removeCard, data, editCard }) => {
+const Column = ({ addCard, removeCard, data, editCard, removeCol }) => {
 	const removeCardAddColId = (cardId) => {
 		removeCard(data.id, cardId);
 	};
@@ -27,20 +28,51 @@ const Column = ({ addCard, removeCard, data, editCard }) => {
 	};
 
 	return (
-		<Grid item xs={6} md={6} lg={3} xl={2} sx={{ padding: '1rem' }}>
-			<Typography variant='h4' align='center'>
-				{data.title}
-			</Typography>
-			<AddTask addCard={addCard} data={data} sx={{ marginBottom: '1rem' }} />
+		<Grid
+			item
+			container
+			direction='column'
+			xs={6}
+			md={6}
+			lg={3}
+			xl={2}
+			sx={{ padding: '1rem' }}
+		>
+			<Grid item>
+				<Typography variant='h4' align='center'>
+					{data.title}
+				</Typography>
+			</Grid>
+			<Grid
+				item
+				container
+				direction='row'
+				justifyContent='space-between'
+				sx={{ paddingTop: '1rem' }}
+			>
+				<AddTask addCard={addCard} data={data} sx={{ marginBottom: '1rem' }} />
 
-			<Droppable droppableId={data.id.toString()}>
-				{(provided, snapshot) => (
-					<div ref={provided.innerRef} {...provided.droppableProps}>
-						{renderCards()}
-						{provided.placeholder}
-					</div>
-				)}
-			</Droppable>
+				<Button
+					aria-label='delete'
+					onClick={() => {
+						removeCol(data.id);
+					}}
+					variant='outlined'
+					startIcon={<DeleteForeverIcon fontSize='inherit' />}
+				>
+					Remove
+				</Button>
+			</Grid>
+			<Grid item>
+				<Droppable droppableId={data.id.toString()}>
+					{(provided, snapshot) => (
+						<div ref={provided.innerRef} {...provided.droppableProps}>
+							{renderCards()}
+							{provided.placeholder}
+						</div>
+					)}
+				</Droppable>
+			</Grid>
 		</Grid>
 	);
 };
