@@ -3,9 +3,12 @@ import Task from './Task';
 import AddTask from './modals/AddTask';
 import { Droppable } from 'react-beautiful-dnd';
 
-const Column = ({ addCard, removeCard, cardColSwitch, data }) => {
+const Column = ({ addCard, removeCard, data, editCard }) => {
 	const removeCardAddColId = (cardId) => {
 		removeCard(data.id, cardId);
+	};
+	const editCardAddColId = (id, cardData) => {
+		editCard(data.id, id, ...cardData);
 	};
 
 	const renderCards = () => {
@@ -17,6 +20,7 @@ const Column = ({ addCard, removeCard, cardColSwitch, data }) => {
 					removeCard={removeCardAddColId}
 					colId={data.id}
 					index={index}
+					editCard={editCardAddColId}
 				/>
 			);
 		});

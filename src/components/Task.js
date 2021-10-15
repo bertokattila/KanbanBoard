@@ -7,8 +7,9 @@ import {
 	Button,
 } from '@mui/material';
 import { Draggable } from 'react-beautiful-dnd';
+import EditTask from './modals/EditTask';
 
-const Task = ({ data, removeCard, colId, index }) => {
+const Task = ({ data, removeCard, colId, index, editCard }) => {
 	return (
 		<Draggable key={data.id} draggableId={data.id.toString()} index={index}>
 			{(provided) => (
@@ -53,6 +54,7 @@ const Task = ({ data, removeCard, colId, index }) => {
 						>
 							Remove
 						</Button>
+						<EditTask data={data} editCard={editCard} />
 					</CardActions>
 				</Card>
 			)}

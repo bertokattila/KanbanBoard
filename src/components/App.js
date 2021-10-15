@@ -30,6 +30,20 @@ function App() {
 		});
 	};
 
+	const editCard = (columnId, cardId, title, description, deadline, state) => {
+		let tmpColumns = columns.slice();
+		const index = tmpColumns[columnId].cards.findIndex(
+			(item) => item.id === cardId
+		);
+		if (index > -1) {
+			tmpColumns[columnId].cards[index].title = title;
+			tmpColumns[columnId].cards[index].description = description;
+			tmpColumns[columnId].cards[index].deadline = deadline;
+			tmpColumns[columnId].cards[index].state = state;
+		}
+		setColumns(tmpColumns);
+	};
+
 	const removeCard = (columnId, cardId) => {
 		let tmpColumns = columns.slice();
 		const index = tmpColumns[columnId].cards.findIndex(
@@ -75,7 +89,7 @@ function App() {
 						columns={columns}
 						addCard={addCard}
 						removeCard={removeCard}
-						cardColSwitch={cardColSwitch}
+						editCard={editCard}
 					/>
 				</Grid>
 			</Grid>
