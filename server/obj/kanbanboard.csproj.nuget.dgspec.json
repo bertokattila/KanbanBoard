@@ -1,0 +1,58 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/kanbanboard.csproj": {}
+  },
+  "projects": {
+    "/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/kanbanboard.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/kanbanboard.csproj",
+        "projectName": "kanbanboard",
+        "projectPath": "/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/kanbanboard.csproj",
+        "packagesPath": "/Users/bertokattila/.nuget/packages/",
+        "outputPath": "/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/bertokattila/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.414/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/kanbanboard.deps.json
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/kanbanboard.runtimeconfig.json
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/kanbanboard.runtimeconfig.dev.json
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/kanbanboard.dll
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/kanbanboard.pdb
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/obj/Debug/netcoreapp3.1/kanbanboard.csprojAssemblyReference.cache
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/obj/Debug/netcoreapp3.1/kanbanboard.AssemblyInfoInputs.cache
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/obj/Debug/netcoreapp3.1/kanbanboard.AssemblyInfo.cs
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/obj/Debug/netcoreapp3.1/kanbanboard.csproj.CoreCompileInputs.cache
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/obj/Debug/netcoreapp3.1/kanbanboard.dll
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/obj/Debug/netcoreapp3.1/kanbanboard.pdb
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/obj/Debug/netcoreapp3.1/kanbanboard.genruntimeconfig.cache
