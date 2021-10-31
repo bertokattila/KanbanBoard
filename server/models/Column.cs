@@ -1,7 +1,7 @@
 
 namespace kanbanboard
 {
-    class Column
+    public class Column
     {
         public int Id { get; set; }
         public string Title { get; set; }

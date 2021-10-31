@@ -3,7 +3,14 @@ using System;
 
 namespace kanbanboard
 {
-    class Card
+    public enum State
+    {
+        Pending,
+        Progress,
+        Done,
+        Postponed
+    }
+    public class Card
     {
         [Key]
         public int Id { get; set; }
@@ -13,12 +20,15 @@ namespace kanbanboard
 
         public string Description { get; set; }
 
-        public string Status { get; set; }
+        [Required]
+        public State Status { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
 
         [Required]
+        public int ColumnId { get; set; }
+
         public Column Column { get; set; }
 
         [Required]
