@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace kanbanboard
@@ -14,184 +15,166 @@ namespace kanbanboard
         {
             db = context;
         }
-        private KanbanboardContext createDbContext()
+        public async Task<Column> AddColumn(Column column)
         {
-            //var contextOptionsBuilder = new DbContextOptionsBuilder<KanbanboardContext>();
-            //contextOptionsBuilder.UseSqlServer(ConnectionString.connection);
-            return new KanbanboardContext();
-        }
 
-        public void AddColumn(Column column)
-        {
-            using (var db = createDbContext())
-            {
-                db.Columns.Add(column);
-                db.SaveChanges();
-            }
+            var createdCol = await db.Columns.AddAsync(column);
+            await db.SaveChangesAsync();
+            return createdCol.Entity;
+
         }
         public void AddCard(Card card)
         {
-            using (var db = createDbContext())
-            {
-                var position = db.Cards
-                                .Where(c => c.ColumnId == card.ColumnId)
-                                .Count();
 
-                card.Position = position;
+            var position = db.Cards
+                            .Where(c => c.ColumnId == card.ColumnId)
+                            .Count();
 
-                db.Cards.Add(card);
-                db.SaveChanges();
-            }
+            card.Position = position;
+
+            db.Cards.Add(card);
+            db.SaveChanges();
+
         }
         public void EditCard(Card card)
         {
-            using (var db = createDbContext())
+
+            var cardToModify = db.Cards
+                            .Where(c => c.Id == card.Id)
+                            .FirstOrDefault();
+
+            if (cardToModify != null)
             {
-                var cardToModify = db.Cards
-                                .Where(c => c.Id == card.Id)
-                                .FirstOrDefault();
+                cardToModify.Title = card.Title;
+                cardToModify.Description = card.Description;
+                cardToModify.Status = card.Status;
+                cardToModify.Date = card.Date;
 
-                if (cardToModify != null)
-                {
-                    cardToModify.Title = card.Title;
-                    cardToModify.Description = card.Description;
-                    cardToModify.Status = card.Status;
-                    cardToModify.Date = card.Date;
-
-                    db.SaveChanges();
-                }
+                db.SaveChanges();
             }
+
         }
         public void DeleteCard(int cardId)
         {
-            using (var db = createDbContext())
+
+            var cardToDelete = db.Cards
+                                .Where(c => c.Id == cardId)
+                                .SingleOrDefault();
+
+            if (cardToDelete != null)
             {
-                var cardToDelete = db.Cards
-                                    .Where(c => c.Id == cardId)
-                                    .SingleOrDefault();
+                var cardsToShift = db.Cards
+                                    .Where(card => card.ColumnId == cardToDelete.ColumnId && card.Position > cardToDelete.Position);
 
-                if (cardToDelete != null)
+                foreach (var card in cardsToShift)
                 {
-                    var cardsToShift = db.Cards
-                                        .Where(card => card.ColumnId == cardToDelete.ColumnId && card.Position > cardToDelete.Position);
-
-                    foreach (var card in cardsToShift)
-                    {
-                        card.Position--;
-                    }
-                    db.Remove(cardToDelete);
-                    db.SaveChanges();
+                    card.Position--;
                 }
+                db.Remove(cardToDelete);
+                db.SaveChanges();
             }
+
         }
 
         public void DeleteColumn(int columnId)
         {
-            using (var db = createDbContext())
+
+            var columnToDelete = db.Columns
+                                .Where(c => c.Id == columnId)
+                                .SingleOrDefault();
+
+            if (columnToDelete != null)
             {
-                var columnToDelete = db.Columns
-                                    .Where(c => c.Id == columnId)
-                                    .SingleOrDefault();
+                var cardsToDelete = db.Cards
+                                    .Where(card => card.ColumnId == columnToDelete.Id);
 
-                if (columnToDelete != null)
+                foreach (var card in cardsToDelete)
                 {
-                    var cardsToDelete = db.Cards
-                                        .Where(card => card.ColumnId == columnToDelete.Id);
-
-                    foreach (var card in cardsToDelete)
-                    {
-                        db.Remove(card);
-                    }
-                    db.Remove(columnToDelete);
-                    db.SaveChanges();
+                    db.Remove(card);
                 }
+                db.Remove(columnToDelete);
+                db.SaveChanges();
             }
+
         }
 
         public void CardLocationChanged(int cardId, int newColId, int newPos)
         {
-            using (var db = createDbContext())
+
+            var card = db.Cards
+                        .Where(card => card.Id == cardId)
+                        .SingleOrDefault();
+            if (card != null)
             {
-                var card = db.Cards
-                            .Where(card => card.Id == cardId)
-                            .SingleOrDefault();
-                if (card != null)
+                if (card.ColumnId == newColId)
                 {
-                    if (card.ColumnId == newColId)
-                    {
-                        int oldPos = card.Position;
-                        if (oldPos == newPos) return;
-                        if (newPos > oldPos)
-                        { // cards between shuld shift to lower positions
-                            var cardsToShift = db.Cards
-                                                .Where(c => c.ColumnId == card.ColumnId && c.Position >= oldPos && c.Position <= newPos);
+                    int oldPos = card.Position;
+                    if (oldPos == newPos) return;
+                    if (newPos > oldPos)
+                    { // cards between shuld shift to lower positions
+                        var cardsToShift = db.Cards
+                                            .Where(c => c.ColumnId == card.ColumnId && c.Position >= oldPos && c.Position <= newPos);
 
-                            foreach (var cardToShift in cardsToShift)
-                            {
-                                cardToShift.Position--;
-                            }
-                        }
-                        else
-                        { // cards between shuld shift to higher positions
-                            var cardsToShift = db.Cards
-                                                .Where(c => c.ColumnId == card.ColumnId && c.Position <= oldPos && c.Position >= newPos);
-
-                            foreach (var cardToShift in cardsToShift)
-                            {
-                                cardToShift.Position++;
-                            }
-                        }
-                    }
-                    else // moves to new col
-                    {
-                        /// old col adjust
-                        var cardsToShiftOldCol = db.Cards
-                                            .Where(c => c.ColumnId == card.ColumnId && c.Position >= card.Position);
-
-                        foreach (var cardToShift in cardsToShiftOldCol)
+                        foreach (var cardToShift in cardsToShift)
                         {
                             cardToShift.Position--;
                         }
+                    }
+                    else
+                    { // cards between shuld shift to higher positions
+                        var cardsToShift = db.Cards
+                                            .Where(c => c.ColumnId == card.ColumnId && c.Position <= oldPos && c.Position >= newPos);
 
-                        /// new col adjust
-                        var cardsToShiftNewCol = db.Cards
-                                            .Where(c => c.ColumnId == newColId && c.Position >= newPos);
-
-                        foreach (var cardToShift in cardsToShiftNewCol)
+                        foreach (var cardToShift in cardsToShift)
                         {
                             cardToShift.Position++;
                         }
+                    }
+                }
+                else // moves to new col
+                {
+                    /// old col adjust
+                    var cardsToShiftOldCol = db.Cards
+                                        .Where(c => c.ColumnId == card.ColumnId && c.Position >= card.Position);
 
-                        card.ColumnId = newColId;
+                    foreach (var cardToShift in cardsToShiftOldCol)
+                    {
+                        cardToShift.Position--;
                     }
 
-                    card.Position = newPos;
-                    db.SaveChanges();
-                }
-            }
-        }
-        public List<Object> GetBoard()
-        {
-            using (var db = createDbContext())
-            {
-                var columns = from c in db.Columns
-                              select new
-                              {
-                                  c.Id,
-                                  c.Title,
-                                  c.Cards
-                              };
+                    /// new col adjust
+                    var cardsToShiftNewCol = db.Cards
+                                        .Where(c => c.ColumnId == newColId && c.Position >= newPos);
 
-                return columns.ToList<Object>();
+                    foreach (var cardToShift in cardsToShiftNewCol)
+                    {
+                        cardToShift.Position++;
+                    }
+
+                    card.ColumnId = newColId;
+                }
+
+                card.Position = newPos;
+                db.SaveChanges();
             }
+
+        }
+        public async Task<IEnumerable<Object>> GetBoard()
+        {
+            var columns = from c in db.Columns
+                          select new
+                          {
+                              c.Id,
+                              c.Title,
+                              c.Cards
+                          };
+
+            return await columns.ToListAsync<Object>();
         }
 
         public async Task<IEnumerable<Card>> GetCards()
         {
-            using (var db = createDbContext())
-            {
-                return await db.Cards.ToListAsync();
-            }
+            return await db.Cards.ToListAsync();
         }
 
     }

@@ -21,17 +21,49 @@ namespace kanbanboard
             _repo = kanbanboardRepositry;
         }
 
-        // GET: api/board
-        [HttpGet("board")]
-        public JsonResult Get()
+
+        [HttpPost("column")]
+        public async Task<ActionResult<Column>> Get(Column column)
         {
-            return new JsonResult(_repo.GetBoard(), new JsonSerializerOptions());
+            try
+            {
+                if (column == null) return BadRequest();
+
+                var createdCol = await _repo.AddColumn(column);
+
+                return CreatedAtAction(nameof(Get), createdCol);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        // GET: api/kanbanboard/board
+        [HttpGet("board")]
+        public async Task<ActionResult> Get()
+        {
+            try
+            {
+                return Ok(await _repo.GetBoard());
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("cards")]
         public async Task<ActionResult> GetCards()
         {
-            return Ok(await _repo.GetCards());
+            try
+            {
+                return Ok(await _repo.GetCards());
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
     }
