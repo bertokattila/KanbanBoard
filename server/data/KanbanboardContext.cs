@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace kanbanboard
 {
-    class KanbanboardContext : DbContext
+    public class KanbanboardContext : DbContext
     {
         //public KanbanboardContext(DbContextOptions<KanbanboardContext> options) : base(options) { }
         public DbSet<Card> Cards { get; set; }

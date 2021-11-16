@@ -24,6 +24,9 @@ namespace kanbanboard
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<KanbanboardContext>();
+            services.AddScoped<IKanbanboardRepositry, KanbanboardRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,13 +1,19 @@
 using System;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace kanbanboard
 {
-    public class KanbanboardRepository
+    public class KanbanboardRepository : IKanbanboardRepositry
     {
+        private readonly KanbanboardContext db;
+        public KanbanboardRepository(KanbanboardContext context)
+        {
+            db = context;
+        }
         private KanbanboardContext createDbContext()
         {
             //var contextOptionsBuilder = new DbContextOptionsBuilder<KanbanboardContext>();
@@ -177,6 +183,14 @@ namespace kanbanboard
                               };
 
                 return columns.ToList<Object>();
+            }
+        }
+
+        public async Task<IEnumerable<Card>> GetCards()
+        {
+            using (var db = createDbContext())
+            {
+                return await db.Cards.ToListAsync();
             }
         }
 

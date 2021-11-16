@@ -1,31 +1,37 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 
 
 namespace kanbanboard
 {
-    [Route("api/")]
+    [Route("api/[controller]")]
     [ApiController]
     public class KanbanboardController : ControllerBase
     {
-        private readonly KanbanboardRepository _repo;
+        private readonly IKanbanboardRepositry _repo;
 
-        public KanbanboardController()
+        public KanbanboardController(IKanbanboardRepositry kanbanboardRepositry)
         {
-            _repo = new KanbanboardRepository();
+            _repo = kanbanboardRepositry;
         }
 
-        // GET: api/TodoItems
+        // GET: api/board
         [HttpGet("board")]
         public JsonResult Get()
         {
             return new JsonResult(_repo.GetBoard(), new JsonSerializerOptions());
+        }
+
+        [HttpGet("cards")]
+        public async Task<ActionResult> GetCards()
+        {
+            return Ok(await _repo.GetCards());
         }
 
     }
