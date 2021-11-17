@@ -17,23 +17,21 @@ namespace kanbanboard
         }
         public async Task<Column> AddColumn(Column column)
         {
-
             var createdCol = await db.Columns.AddAsync(column);
             await db.SaveChangesAsync();
             return createdCol.Entity;
-
         }
-        public void AddCard(Card card)
+        public async Task<Card> AddCard(Card card)
         {
-
             var position = db.Cards
                             .Where(c => c.ColumnId == card.ColumnId)
                             .Count();
 
             card.Position = position;
 
-            db.Cards.Add(card);
-            db.SaveChanges();
+            var createdCard = await db.Cards.AddAsync(card);
+            await db.SaveChangesAsync();
+            return createdCard.Entity;
 
         }
         public void EditCard(Card card)
@@ -54,12 +52,12 @@ namespace kanbanboard
             }
 
         }
-        public void DeleteCard(int cardId)
+        public async Task DeleteCard(int cardId)
         {
 
-            var cardToDelete = db.Cards
+            var cardToDelete = await db.Cards
                                 .Where(c => c.Id == cardId)
-                                .SingleOrDefault();
+                                .SingleOrDefaultAsync();
 
             if (cardToDelete != null)
             {
@@ -71,7 +69,7 @@ namespace kanbanboard
                     card.Position--;
                 }
                 db.Remove(cardToDelete);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
 
         }
@@ -176,6 +174,11 @@ namespace kanbanboard
         {
             return await db.Cards.ToListAsync();
         }
-
+        public async Task<Card> GetCard(int id)
+        {
+            return await db.Cards
+                        .Where(c => c.Id == id)
+                        .SingleOrDefaultAsync();
+        }
     }
 }
