@@ -95,6 +95,28 @@ namespace kanbanboard
             }
         }
 
+        [HttpDelete("column/{id:int}")]
+        public async Task<ActionResult> DeleteColumn(int id)
+        {
+            try
+            {
+                var colToDelete = await _repo.GetColumn(id);
+
+                if (colToDelete == null)
+                {
+                    return NotFound("Column not found");
+                }
+
+                await _repo.DeleteColumn(id);
+
+                return Ok("Column (and cards in the column if any) deleted");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // GET: api/kanbanboard/board
         [HttpGet("board")]
         public async Task<ActionResult> GetBoard()

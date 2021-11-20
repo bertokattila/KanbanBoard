@@ -9,9 +9,10 @@ namespace kanbanboard
         Task<Column> AddColumn(Column column);
         Task<Card> AddCard(Card card);
         Task<Card> GetCard(int id);
+        Task<Column> GetColumn(int id);
         Task<Card> UpdateCard(Card card);
         Task DeleteCard(int cardId);
-        void DeleteColumn(int columnId);
+        Task DeleteColumn(int columnId);
         void CardLocationChanged(int cardId, int newColId, int newPos);
         Task<IEnumerable<Object>> GetBoard();
 

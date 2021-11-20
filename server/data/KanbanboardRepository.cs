@@ -76,12 +76,12 @@ namespace kanbanboard
 
         }
 
-        public void DeleteColumn(int columnId)
+        public async Task DeleteColumn(int columnId)
         {
 
-            var columnToDelete = db.Columns
+            var columnToDelete = await db.Columns
                                 .Where(c => c.Id == columnId)
-                                .SingleOrDefault();
+                                .SingleOrDefaultAsync();
 
             if (columnToDelete != null)
             {
@@ -93,7 +93,7 @@ namespace kanbanboard
                     db.Remove(card);
                 }
                 db.Remove(columnToDelete);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
 
         }
@@ -179,6 +179,13 @@ namespace kanbanboard
         public async Task<Card> GetCard(int id)
         {
             return await db.Cards
+                        .Where(c => c.Id == id)
+                        .SingleOrDefaultAsync();
+        }
+
+        public async Task<Column> GetColumn(int id)
+        {
+            return await db.Columns
                         .Where(c => c.Id == id)
                         .SingleOrDefaultAsync();
         }
