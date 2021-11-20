@@ -34,12 +34,12 @@ namespace kanbanboard
             return createdCard.Entity;
 
         }
-        public void EditCard(Card card)
+        public async Task<Card> UpdateCard(Card card)
         {
 
-            var cardToModify = db.Cards
+            var cardToModify = await db.Cards
                             .Where(c => c.Id == card.Id)
-                            .FirstOrDefault();
+                            .FirstOrDefaultAsync();
 
             if (cardToModify != null)
             {
@@ -48,8 +48,10 @@ namespace kanbanboard
                 cardToModify.Status = card.Status;
                 cardToModify.Date = card.Date;
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
+                return cardToModify;
             }
+            return null;
 
         }
         public async Task DeleteCard(int cardId)

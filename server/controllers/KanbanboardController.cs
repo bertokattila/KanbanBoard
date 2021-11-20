@@ -21,6 +21,22 @@ namespace kanbanboard
             _repo = kanbanboardRepositry;
         }
 
+        [HttpPost("column")]
+        public async Task<ActionResult<Column>> AddColumn(Column column)
+        {
+            try
+            {
+                if (column == null) return BadRequest();
+
+                var createdCol = await _repo.AddColumn(column);
+
+                return CreatedAtAction(nameof(GetBoard), createdCol);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         [HttpPost("card")]
         public async Task<ActionResult<Column>> AddCard(Card card)
@@ -39,16 +55,17 @@ namespace kanbanboard
             }
         }
 
-        [HttpPost("column")]
-        public async Task<ActionResult<Column>> AddColumn(Column column)
+        [HttpPut("card/{id:int}")]
+        public async Task<ActionResult<Card>> UpdateCard(int id, Card card)
         {
             try
             {
-                if (column == null) return BadRequest();
+                if (card == null || id != card.Id) return BadRequest();
 
-                var createdCol = await _repo.AddColumn(column);
+                var cardToUpdate = await _repo.GetCard(id);
+                if (cardToUpdate == null) return NotFound();
 
-                return CreatedAtAction(nameof(GetBoard), createdCol);
+                return await _repo.UpdateCard(card);
             }
             catch (Exception)
             {
@@ -56,7 +73,7 @@ namespace kanbanboard
             }
         }
 
-        [HttpDelete("cards/{id:int}")]
+        [HttpDelete("card/{id:int}")]
         public async Task<ActionResult> DeleteCard(int id)
         {
             try
