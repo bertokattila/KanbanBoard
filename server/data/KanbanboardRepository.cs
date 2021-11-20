@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using kanbanboard.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -98,18 +99,21 @@ namespace kanbanboard
 
         }
 
-        public void CardLocationChanged(int cardId, int newColId, int newPos)
+        public async Task<Card> CardLocationChanged(CardMoveData moveData)
         {
+            int cardId = (int)moveData.cardId;
+            int newColId = (int)moveData.newColId;
+            int newPos = (int)moveData.newPos;
 
-            var card = db.Cards
+            var card = await db.Cards
                         .Where(card => card.Id == cardId)
-                        .SingleOrDefault();
+                        .SingleOrDefaultAsync();
             if (card != null)
             {
                 if (card.ColumnId == newColId)
                 {
                     int oldPos = card.Position;
-                    if (oldPos == newPos) return;
+                    if (oldPos == newPos) return card;
                     if (newPos > oldPos)
                     { // cards between shuld shift to lower positions
                         var cardsToShift = db.Cards
@@ -155,8 +159,9 @@ namespace kanbanboard
                 }
 
                 card.Position = newPos;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
+            return card;
 
         }
         public async Task<IEnumerable<Object>> GetBoard()

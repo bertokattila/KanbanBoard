@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using kanbanboard.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -116,6 +117,24 @@ namespace kanbanboard
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpPut("card/{id:int}/location/")]
+        public async Task<ActionResult<Card>> ChangeCardLocation(int id, CardMoveData data)
+        {
+            try
+            {
+                if (id != data.cardId) return BadRequest();
+                var card = await _repo.GetCard(id);
+                if (card == null) return NotFound();
+
+                return await _repo.CardLocationChanged(data);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
 
         // GET: api/kanbanboard/board
         [HttpGet("board")]

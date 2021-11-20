@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using kanbanboard.DTOs;
 
 namespace kanbanboard
 {
@@ -13,9 +14,8 @@ namespace kanbanboard
         Task<Card> UpdateCard(Card card);
         Task DeleteCard(int cardId);
         Task DeleteColumn(int columnId);
-        void CardLocationChanged(int cardId, int newColId, int newPos);
+        Task<Card> CardLocationChanged(CardMoveData moveData);
         Task<IEnumerable<Object>> GetBoard();
-
         Task<IEnumerable<Card>> GetCards();
     }
 }
