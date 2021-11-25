@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace kanbanboard.DTOs
 {
-    public class CardMoveData
+    public class CardMoveDto
     {
         [Required]
         public int? cardId { get; set; }

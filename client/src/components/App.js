@@ -6,12 +6,11 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 function App() {
 	const [columns, setColumns] = useState([]);
-	const [, setUid] = useState(0); // only temporary until no server side is available
-	const [, setColId] = useState(0); // only temporary until no server side is available
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [error, setError] = useState(false);
 	const baseUrl = 'http://localhost:5000';
 
+	/// initially getting the data from server
 	useEffect(() => {
 		fetch(baseUrl + '/api/kanbanboard/board')
 			.then((res) => res.json())
@@ -53,48 +52,6 @@ function App() {
 			);
 	};
 
-	const addCard = (columnId, title, description, deadline, state) => {
-		setUid((prev) => {
-			let tmpColumns = columns.slice();
-			const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
-			tmpColumns[colIndex].cards.push({
-				columnId: columnId,
-				id: prev,
-				title: title,
-				description: description,
-				deadline: deadline,
-				state: state,
-			});
-			setColumns(tmpColumns);
-			return prev + 1;
-		});
-	};
-
-	const editCard = (columnId, cardId, title, description, deadline, state) => {
-		let tmpColumns = columns.slice();
-		const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
-		const index = tmpColumns[colIndex].cards.findIndex(
-			(item) => item.id === cardId
-		);
-		if (index > -1) {
-			tmpColumns[colIndex].cards[index].title = title;
-			tmpColumns[colIndex].cards[index].description = description;
-			tmpColumns[colIndex].cards[index].deadline = deadline;
-			tmpColumns[colIndex].cards[index].state = state;
-		}
-		setColumns(tmpColumns);
-	};
-
-	const removeCard = (columnId, cardId) => {
-		let tmpColumns = columns.slice();
-		const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
-		const index = tmpColumns[colIndex].cards.findIndex(
-			(item) => item.id === cardId
-		);
-		index > -1 && tmpColumns[colIndex].cards.splice(index, 1);
-		setColumns(tmpColumns);
-	};
-
 	const removeCol = (columnId) => {
 		fetch(baseUrl + '/api/kanbanboard/column/' + columnId, {
 			method: 'DELETE',
@@ -116,6 +73,82 @@ function App() {
 		);
 	};
 
+	const addCard = (columnId, title, description, deadline, state) => {
+		fetch(baseUrl + '/api/kanbanboard/card', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				columnId: columnId,
+				title: title,
+				description: description,
+				deadline: deadline,
+				state: state,
+			}),
+		})
+			.then((response) => response.json())
+			.then(
+				(card) => {
+					let tmpColumns = columns.slice();
+					const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
+					tmpColumns[colIndex].cards.push({
+						columnId: columnId,
+						id: card.id,
+						title: title,
+						description: description,
+						deadline: deadline,
+						state: state,
+					});
+					setColumns(tmpColumns);
+				},
+				(err) => {
+					console.log(err);
+					setError(true);
+				}
+			);
+	};
+
+	// TODO
+	const editCard = (columnId, cardId, title, description, deadline, state) => {
+		let tmpColumns = columns.slice();
+		const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
+		const index = tmpColumns[colIndex].cards.findIndex(
+			(item) => item.id === cardId
+		);
+		if (index > -1) {
+			tmpColumns[colIndex].cards[index].title = title;
+			tmpColumns[colIndex].cards[index].description = description;
+			tmpColumns[colIndex].cards[index].deadline = deadline;
+			tmpColumns[colIndex].cards[index].state = state;
+		}
+		setColumns(tmpColumns);
+	};
+
+	const removeCard = (columnId, cardId) => {
+		fetch(baseUrl + '/api/kanbanboard/card/' + cardId, {
+			method: 'DELETE',
+		}).then(
+			(resp) => {
+				if (resp.status === 200) {
+					let tmpColumns = columns.slice();
+					const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
+					const index = tmpColumns[colIndex].cards.findIndex(
+						(item) => item.id === cardId
+					);
+					index > -1 && tmpColumns[colIndex].cards.splice(index, 1);
+					setColumns(tmpColumns);
+				} else {
+					setError(true);
+				}
+			},
+			(err) => {
+				console.log(err);
+				setError(true);
+			}
+		);
+	};
+
 	const cardColSwitch = (result) => {
 		if (!result.destination) {
 			return;
@@ -123,7 +156,6 @@ function App() {
 		const oldColId = parseInt(result.source.droppableId);
 		const newColId = parseInt(result.destination.droppableId);
 		const cardId = parseInt(result.draggableId);
-
 		let tmpColumns = columns.slice();
 
 		const oldColIndex = tmpColumns.findIndex((item) => item.id === oldColId);
@@ -139,6 +171,27 @@ function App() {
 		tmpColumns[newColIndex].cards.splice(result.destination.index, 0, tmpCard);
 
 		setColumns(tmpColumns);
+		fetch(baseUrl + '/api/kanbanboard/card/' + cardId + '/location/', {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				cardId: cardId,
+				newColId: newColId,
+				newPos: result.destination.index,
+			}),
+		}).then(
+			(resp) => {
+				if (resp.status !== 200) {
+					setError(true);
+				}
+			},
+			(err) => {
+				console.log(err);
+				setError(true);
+			}
+		);
 	};
 	if (error) return <h1>Error occured, please refresh</h1>;
 	if (isLoaded) {

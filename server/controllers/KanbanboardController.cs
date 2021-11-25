@@ -33,9 +33,8 @@ namespace kanbanboard
 
                 return CreatedAtAction(nameof(GetBoard), new ColumnDto(createdCol));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -63,15 +62,25 @@ namespace kanbanboard
         }
 
         [HttpPost("card")]
-        public async Task<ActionResult<Column>> AddCard(Card card)
+        public async Task<ActionResult<CardDto>> AddCard(AddCardDto card)
         {
             try
             {
                 if (card == null) return BadRequest();
+                State state;
+                Enum.TryParse(card.State, true, out state);
 
-                var createdCard = await _repo.AddCard(card);
+                var createdCard = await _repo.AddCard(new Card
+                {
+                    Title = card.Title,
+                    Description = card.Description,
+                    Status = state,
+                    Date = DateTime.Parse(card.Deadline),
+                    ColumnId = card.ColumnId
 
-                return CreatedAtAction(nameof(GetBoard), createdCard);
+                });
+
+                return CreatedAtAction(nameof(GetBoard), new CardDto(createdCard));
             }
             catch (Exception)
             {
@@ -120,7 +129,7 @@ namespace kanbanboard
         }
 
         [HttpPut("card/{id:int}/location/")]
-        public async Task<ActionResult<Card>> ChangeCardLocation(int id, CardMoveData data)
+        public async Task<ActionResult<Card>> ChangeCardLocation(int id, CardMoveDto data)
         {
             try
             {

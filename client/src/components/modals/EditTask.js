@@ -99,18 +99,18 @@ const EditTask = ({ data, editCard }) => {
 							value={status}
 						>
 							<FormControlLabel
-								value='pending'
+								value='Pending'
 								control={<Radio />}
 								label='Pending'
 							/>
 							<FormControlLabel
-								value='progress'
+								value='Progress'
 								control={<Radio />}
 								label='In Progress'
 							/>
-							<FormControlLabel value='done' control={<Radio />} label='Done' />
+							<FormControlLabel value='Done' control={<Radio />} label='Done' />
 							<FormControlLabel
-								value='postponed'
+								value='Postponed'
 								control={<Radio />}
 								label='Postponed'
 							/>

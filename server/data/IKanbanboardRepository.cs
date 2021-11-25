@@ -14,7 +14,7 @@ namespace kanbanboard
         Task<Card> UpdateCard(Card card);
         Task DeleteCard(int cardId);
         Task DeleteColumn(int columnId);
-        Task<Card> CardLocationChanged(CardMoveData moveData);
+        Task<Card> CardLocationChanged(CardMoveDto moveData);
         Task<IEnumerable<Column>> GetBoard();
         Task<IEnumerable<Card>> GetCards();
     }

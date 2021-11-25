@@ -99,7 +99,7 @@ namespace kanbanboard
 
         }
 
-        public async Task<Card> CardLocationChanged(CardMoveData moveData)
+        public async Task<Card> CardLocationChanged(CardMoveDto moveData)
         {
             int cardId = (int)moveData.cardId;
             int newColId = (int)moveData.newColId;
