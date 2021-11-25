@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace kanbanboard
 {
@@ -33,7 +33,5 @@ namespace kanbanboard
 
         [Required]
         public int Position { get; set; }
-
-
     }
 }

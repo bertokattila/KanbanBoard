@@ -164,17 +164,17 @@ namespace kanbanboard
             return card;
 
         }
-        public async Task<IEnumerable<Object>> GetBoard()
+        public async Task<IEnumerable<Column>> GetBoard()
         {
             var columns = from c in db.Columns
-                          select new
+                          select new Column
                           {
-                              c.Id,
-                              c.Title,
-                              c.Cards
+                              Id = c.Id,
+                              Title = c.Title,
+                              Cards = c.Cards
                           };
 
-            return await columns.ToListAsync<Object>();
+            return await columns.ToListAsync<Column>();
         }
 
         public async Task<IEnumerable<Card>> GetCards()

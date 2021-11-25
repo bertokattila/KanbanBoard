@@ -23,15 +23,38 @@ namespace kanbanboard
         }
 
         [HttpPost("column")]
-        public async Task<ActionResult<Column>> AddColumn(Column column)
+        public async Task<ActionResult<ColumnDto>> AddColumn(AddColumnDto addColumnDto)
         {
             try
             {
-                if (column == null) return BadRequest();
+                if (addColumnDto == null) return BadRequest();
 
-                var createdCol = await _repo.AddColumn(column);
+                Column createdCol = await _repo.AddColumn(new Column { Title = addColumnDto.Title });
 
-                return CreatedAtAction(nameof(GetBoard), createdCol);
+                return CreatedAtAction(nameof(GetBoard), new ColumnDto(createdCol));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete("column/{id:int}")]
+        public async Task<ActionResult> DeleteColumn(int id)
+        {
+            try
+            {
+                var colToDelete = await _repo.GetColumn(id);
+
+                if (colToDelete == null)
+                {
+                    return NotFound("Column not found");
+                }
+
+                await _repo.DeleteColumn(id);
+
+                return Ok("Column (and cards in the column if any) deleted");
             }
             catch (Exception)
             {
@@ -96,28 +119,6 @@ namespace kanbanboard
             }
         }
 
-        [HttpDelete("column/{id:int}")]
-        public async Task<ActionResult> DeleteColumn(int id)
-        {
-            try
-            {
-                var colToDelete = await _repo.GetColumn(id);
-
-                if (colToDelete == null)
-                {
-                    return NotFound("Column not found");
-                }
-
-                await _repo.DeleteColumn(id);
-
-                return Ok("Column (and cards in the column if any) deleted");
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         [HttpPut("card/{id:int}/location/")]
         public async Task<ActionResult<Card>> ChangeCardLocation(int id, CardMoveData data)
         {
@@ -138,11 +139,17 @@ namespace kanbanboard
 
         // GET: api/kanbanboard/board
         [HttpGet("board")]
-        public async Task<ActionResult> GetBoard()
+        public async Task<ActionResult<IEnumerable<ColumnDto>>> GetBoard()
         {
             try
             {
-                return Ok(await _repo.GetBoard());
+                IEnumerable<Column> columns = await _repo.GetBoard();
+                List<ColumnDto> columnDtos = new List<ColumnDto>();
+                foreach (Column column in columns)
+                {
+                    columnDtos.Add(new ColumnDto(column));
+                }
+                return Ok(columnDtos);
             }
             catch (Exception)
             {

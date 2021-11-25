@@ -1,21 +1,56 @@
 import { Grid } from '@mui/material';
 import Board from './Board';
 import Header from './Header';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 function App() {
 	const [columns, setColumns] = useState([]);
 	const [, setUid] = useState(0); // only temporary until no server side is available
 	const [, setColId] = useState(0); // only temporary until no server side is available
+	const [isLoaded, setIsLoaded] = useState(false);
+	const [error, setError] = useState(false);
+	const baseUrl = 'http://localhost:5000';
+
+	useEffect(() => {
+		fetch(baseUrl + '/api/kanbanboard/board')
+			.then((res) => res.json())
+			.then(
+				(board) => {
+					setIsLoaded(true);
+					for (const column of board) {
+						column.cards.sort((a, b) => a.position - b.position);
+					}
+					setColumns(board);
+				},
+
+				(err) => {
+					setError(true);
+					console.log(err);
+				}
+			);
+	}, []);
 
 	const addColumn = (title) => {
-		setColId((prev) => {
-			let tmpColumns = columns.slice();
-			tmpColumns.push({ id: prev, title: title, cards: [] });
-			setColumns(tmpColumns);
-			return prev + 1;
-		});
+		fetch(baseUrl + '/api/kanbanboard/column', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ title: title }),
+		})
+			.then((response) => response.json())
+			.then(
+				(column) => {
+					let tmpColumns = columns.slice();
+					tmpColumns.push({ id: column.id, title: column.title, cards: [] });
+					setColumns(tmpColumns);
+				},
+				(err) => {
+					console.log(err);
+					setError(true);
+				}
+			);
 	};
 
 	const addCard = (columnId, title, description, deadline, state) => {
@@ -61,10 +96,24 @@ function App() {
 	};
 
 	const removeCol = (columnId) => {
-		let tmpColumns = columns.slice();
-		const index = tmpColumns.findIndex((item) => item.id === columnId);
-		tmpColumns.splice(index, 1);
-		setColumns(tmpColumns);
+		fetch(baseUrl + '/api/kanbanboard/column/' + columnId, {
+			method: 'DELETE',
+		}).then(
+			(resp) => {
+				if (resp.status === 200) {
+					let tmpColumns = columns.slice();
+					const index = tmpColumns.findIndex((item) => item.id === columnId);
+					tmpColumns.splice(index, 1);
+					setColumns(tmpColumns);
+				} else {
+					setError(true);
+				}
+			},
+			(err) => {
+				console.log(err);
+				setError(true);
+			}
+		);
 	};
 
 	const cardColSwitch = (result) => {
@@ -91,29 +140,32 @@ function App() {
 
 		setColumns(tmpColumns);
 	};
-
-	return (
-		<DragDropContext onDragEnd={cardColSwitch}>
-			<Grid container alignItems='center' justifyContent='center'>
-				<Grid
-					item
-					container
-					xs={10}
-					alignItems='center'
-					justifyContent='center'
-				>
-					<Header addColumn={addColumn} />
-					<Board
-						columns={columns}
-						addCard={addCard}
-						removeCard={removeCard}
-						editCard={editCard}
-						removeCol={removeCol}
-					/>
+	if (error) return <h1>Error occured, please refresh</h1>;
+	if (isLoaded) {
+		return (
+			<DragDropContext onDragEnd={cardColSwitch}>
+				<Grid container alignItems='center' justifyContent='center'>
+					<Grid
+						item
+						container
+						xs={10}
+						alignItems='center'
+						justifyContent='center'
+					>
+						<Header addColumn={addColumn} />
+						<Board
+							columns={columns}
+							addCard={addCard}
+							removeCard={removeCard}
+							editCard={editCard}
+							removeCol={removeCol}
+						/>
+					</Grid>
 				</Grid>
-			</Grid>
-		</DragDropContext>
-	);
+			</DragDropContext>
+		);
+	}
+	return <h1>Loading...</h1>;
 }
 
 export default App;
