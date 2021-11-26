@@ -1,4 +1,5 @@
-![Screen Recording 2021-11-27 at 0 41 17](https://user-images.githubusercontent.com/22593928/143661462-8eb7df98-268d-47ad-ad2c-b938c9816266.gif)
+![Screen-Recording-2021-11-27-at-0 41 17](https://user-images.githubusercontent.com/22593928/143661499-0ead319e-1cc9-4a8a-96e6-6c4906fa9ba5.gif)
+
 
 # Getting Started with Create React App
 
