@@ -8,8 +8,29 @@ import {
 } from '@mui/material';
 import { Draggable } from 'react-beautiful-dnd';
 import EditTask from './modals/EditTask';
+import Paper from '@mui/material/Paper';
 
 const Task = ({ data, removeCard, colId, index, editCard }) => {
+	const stateColor = (state) => {
+		switch (state) {
+			case 'Pending':
+				return '#b28704';
+				break;
+			case 'Postponed':
+				return '#aa2e25';
+				break;
+			case 'Progress':
+				return '#482880';
+				break;
+			case 'Done':
+				return '#357a38';
+				break;
+
+			default:
+				return 'grey';
+				break;
+		}
+	};
 	return (
 		<Draggable key={data.id} draggableId={data.id.toString()} index={index}>
 			{(provided) => (
@@ -23,13 +44,19 @@ const Task = ({ data, removeCard, colId, index, editCard }) => {
 					}}
 				>
 					<CardContent>
-						<Typography
-							sx={{ fontSize: 14 }}
-							color='text.secondary'
-							gutterBottom
+						<Paper
+							elevation={0}
+							sx={{ width: 'fit-content', background: stateColor(data.state) }}
 						>
-							{data.state}
-						</Typography>
+							<Typography
+								sx={{ fontSize: 14, padding: '5px', fontWeight: 'bold' }}
+								color='text.secondary'
+								gutterBottom
+							>
+								{data.state}
+							</Typography>
+						</Paper>
+
 						<Typography
 							variant='h5'
 							component='div'

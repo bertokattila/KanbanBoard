@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using kanbanboard.data.models;
 using kanbanboard.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace kanbanboard
+
+namespace kanbanboard.data
 {
     public class KanbanboardRepository : IKanbanboardRepositry
     {

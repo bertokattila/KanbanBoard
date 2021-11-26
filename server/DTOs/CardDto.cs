@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using kanbanboard.data.models;
 
 namespace kanbanboard.DTOs
 {

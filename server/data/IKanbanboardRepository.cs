@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using kanbanboard.data.models;
 using kanbanboard.DTOs;
 
-namespace kanbanboard
+namespace kanbanboard.data
 {
     public interface IKanbanboardRepositry
     {

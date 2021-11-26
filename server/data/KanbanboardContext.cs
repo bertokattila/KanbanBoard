@@ -1,7 +1,8 @@
 using System;
+using kanbanboard.data.models;
 using Microsoft.EntityFrameworkCore;
 
-namespace kanbanboard
+namespace kanbanboard.data
 {
     public class KanbanboardContext : DbContext
     {

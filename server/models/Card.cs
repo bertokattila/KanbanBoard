@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace kanbanboard
+namespace kanbanboard.data.models
 {
     public enum State
     {

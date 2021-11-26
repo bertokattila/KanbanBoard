@@ -1,5 +1,5 @@
 
-namespace kanbanboard
+namespace kanbanboard.data.models
 {
     public class Column
     {
