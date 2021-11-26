@@ -111,6 +111,34 @@ function App() {
 
 	// TODO
 	const editCard = (columnId, cardId, title, description, deadline, state) => {
+		fetch(baseUrl + '/api/kanbanboard/card/' + cardId, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				id: cardId,
+				title: title,
+				description: description,
+				deadline: deadline,
+				state: state,
+			}),
+		})
+			.then((response) => {
+				console.log(response);
+				if (!response.ok) setError(true);
+				return response;
+			})
+			.then((response) => response.json())
+			.then(
+				(card) => {
+					if (card.id !== cardId) setError(true);
+				},
+				(err) => {
+					console.log(err);
+					setError(true);
+				}
+			);
 		let tmpColumns = columns.slice();
 		const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
 		const index = tmpColumns[colIndex].cards.findIndex(

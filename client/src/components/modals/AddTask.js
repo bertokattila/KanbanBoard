@@ -38,7 +38,7 @@ const AddTask = ({ data, addCard }) => {
 	const [validCardTitleValue, setvalidCardTitleValue] =
 		React.useState('pending');
 
-	const defaultStatusValue = 'pending';
+	const defaultStatusValue = 'Pending';
 	const [status, setStatus] = React.useState(defaultStatusValue);
 	const cardTitleValueRef = useRef();
 	const cardDateValueRef = useRef();
