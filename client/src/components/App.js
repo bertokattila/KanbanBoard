@@ -12,7 +12,7 @@ function App() {
 
 	/// initially getting the data from server
 	useEffect(() => {
-		fetch(baseUrl + '/api/column/board')
+		fetch(baseUrl + '/api/column/board/')
 			.then((res) => res.json())
 			.then(
 				(board) => {
@@ -31,7 +31,7 @@ function App() {
 	}, []);
 
 	const addColumn = (title) => {
-		fetch(baseUrl + '/api/column', {
+		fetch(baseUrl + '/api/column/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
