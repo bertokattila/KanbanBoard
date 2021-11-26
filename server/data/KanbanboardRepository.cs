@@ -103,9 +103,9 @@ namespace kanbanboard.data
 
         public async Task<Card> CardLocationChanged(CardMoveDto moveData)
         {
-            int cardId = (int)moveData.cardId;
-            int newColId = (int)moveData.newColId;
-            int newPos = (int)moveData.newPos;
+            int cardId = (int)moveData.CardId;
+            int newColId = (int)moveData.NewColId;
+            int newPos = (int)moveData.NewPos;
 
             var card = await db.Cards
                         .Where(card => card.Id == cardId)

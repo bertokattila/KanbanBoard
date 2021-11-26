@@ -5,13 +5,13 @@ namespace kanbanboard.DTOs
     public class CardMoveDto
     {
         [Required]
-        public int? cardId { get; set; }
+        public int? CardId { get; set; }
 
         [Required]
-        public int? newColId { get; set; }
+        public int? NewColId { get; set; }
 
         [Required]
-        public int? newPos { get; set; }
+        public int? NewPos { get; set; }
 
     }
 }

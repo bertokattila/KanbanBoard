@@ -30,8 +30,7 @@ namespace kanbanboard.controllers
             try
             {
                 if (card == null) return BadRequest();
-                State state;
-                Enum.TryParse(card.State, true, out state);
+                Enum.TryParse(card.State, true, out State state);
 
                 var createdCard = await _repo.AddCard(new Card
                 {
@@ -62,8 +61,7 @@ namespace kanbanboard.controllers
                 var cardToUpdate = await _repo.GetCard(id);
                 if (cardToUpdate == null) return NotFound();
 
-                State state;
-                Enum.TryParse(card.State, true, out state);
+                Enum.TryParse(card.State, true, out State state);
                 Card updatedCard = await _repo.UpdateCard(new Card
                 {
                     Id = card.Id,
@@ -124,7 +122,7 @@ namespace kanbanboard.controllers
         {
             try
             {
-                if (id != data.cardId) return BadRequest();
+                if (id != data.CardId) return BadRequest();
                 var card = await _repo.GetCard(id);
                 if (card == null) return NotFound();
 
