@@ -12,7 +12,7 @@ function App() {
 
 	/// initially getting the data from server
 	useEffect(() => {
-		fetch(baseUrl + '/api/kanbanboard/board')
+		fetch(baseUrl + '/api/column/board')
 			.then((res) => res.json())
 			.then(
 				(board) => {
@@ -31,7 +31,7 @@ function App() {
 	}, []);
 
 	const addColumn = (title) => {
-		fetch(baseUrl + '/api/kanbanboard/column', {
+		fetch(baseUrl + '/api/column', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ function App() {
 	};
 
 	const removeCol = (columnId) => {
-		fetch(baseUrl + '/api/kanbanboard/column/' + columnId, {
+		fetch(baseUrl + '/api/column/' + columnId, {
 			method: 'DELETE',
 		}).then(
 			(resp) => {
@@ -74,7 +74,7 @@ function App() {
 	};
 
 	const addCard = (columnId, title, description, deadline, state) => {
-		fetch(baseUrl + '/api/kanbanboard/card', {
+		fetch(baseUrl + '/api/card/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ function App() {
 
 	// TODO
 	const editCard = (columnId, cardId, title, description, deadline, state) => {
-		fetch(baseUrl + '/api/kanbanboard/card/' + cardId, {
+		fetch(baseUrl + '/api/card/' + cardId, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ function App() {
 	};
 
 	const removeCard = (columnId, cardId) => {
-		fetch(baseUrl + '/api/kanbanboard/card/' + cardId, {
+		fetch(baseUrl + '/api/card/' + cardId, {
 			method: 'DELETE',
 		}).then(
 			(resp) => {
@@ -199,7 +199,7 @@ function App() {
 		tmpColumns[newColIndex].cards.splice(result.destination.index, 0, tmpCard);
 
 		setColumns(tmpColumns);
-		fetch(baseUrl + '/api/kanbanboard/card/' + cardId + '/location/', {
+		fetch(baseUrl + '/api/card/' + cardId + '/location/', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
