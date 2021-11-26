@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material';
 import Column from './Column';
+import React from 'react';
 
 const Board = ({
 	columns,

@@ -3,6 +3,7 @@ import Task from './Task';
 import AddTask from './modals/AddTask';
 import { Droppable } from 'react-beautiful-dnd';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import React from 'react';
 
 const Column = ({ addCard, removeCard, data, editCard, removeCol }) => {
 	const removeCardAddColId = (cardId) => {
@@ -19,7 +20,6 @@ const Column = ({ addCard, removeCard, data, editCard, removeCol }) => {
 					data={item}
 					key={item.id}
 					removeCard={removeCardAddColId}
-					colId={data.id}
 					index={index}
 					editCard={editCardAddColId}
 				/>
@@ -65,7 +65,7 @@ const Column = ({ addCard, removeCard, data, editCard, removeCol }) => {
 			</Grid>
 			<Grid item>
 				<Droppable droppableId={data.id.toString()}>
-					{(provided, snapshot) => (
+					{(provided) => (
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{renderCards()}
 							{provided.placeholder}

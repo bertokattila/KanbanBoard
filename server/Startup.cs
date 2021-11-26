@@ -49,7 +49,7 @@ namespace kanbanboard
                          .AllowAnyHeader()
                          .AllowAnyMethod()
                          .SetIsOriginAllowed((host) => true)
-                         .AllowCredentials()
+                         .AllowAnyOrigin()
                      );
             app.UseHttpsRedirection();
             app.UseRouting();

@@ -10,25 +10,19 @@ import { Draggable } from 'react-beautiful-dnd';
 import EditTask from './modals/EditTask';
 import Paper from '@mui/material/Paper';
 
-const Task = ({ data, removeCard, colId, index, editCard }) => {
+const Task = ({ data, removeCard, index, editCard }) => {
 	const stateColor = (state) => {
 		switch (state) {
 			case 'Pending':
 				return '#b28704';
-				break;
 			case 'Postponed':
 				return '#aa2e25';
-				break;
 			case 'Progress':
 				return '#482880';
-				break;
 			case 'Done':
 				return '#357a38';
-				break;
-
 			default:
 				return 'grey';
-				break;
 		}
 	};
 	return (

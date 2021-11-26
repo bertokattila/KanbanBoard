@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material';
 import Board from './Board';
 import Header from './Header';
-import { useState, useEffect } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
+import React, { useState, useEffect } from 'react';
 
 function App() {
 	const [columns, setColumns] = useState([]);
