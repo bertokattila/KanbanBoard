@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace kanbanboard
+namespace kanbanboard.controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -89,7 +89,7 @@ namespace kanbanboard
         }
 
         [HttpPut("card/{id:int}")]
-        public async Task<ActionResult<Card>> UpdateCard(int id, Card card)
+        public async Task<ActionResult<CardDto>> UpdateCard(int id, EditCardDto card)
         {
             try
             {
@@ -98,7 +98,19 @@ namespace kanbanboard
                 var cardToUpdate = await _repo.GetCard(id);
                 if (cardToUpdate == null) return NotFound();
 
-                return await _repo.UpdateCard(card);
+                State state;
+                Enum.TryParse(card.State, true, out state);
+                Card updatedCard = await _repo.UpdateCard(new Card
+                {
+                    Id = card.Id,
+                    Title = card.Title,
+                    Description = card.Description,
+                    Status = state,
+                    Date = DateTime.Parse(card.Deadline)
+
+                });
+                return new CardDto(updatedCard);
+
             }
             catch (Exception)
             {
