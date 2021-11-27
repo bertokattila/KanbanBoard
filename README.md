@@ -1,73 +1,68 @@
-![Screen-Recording-2021-11-27-at-0 41 17](https://user-images.githubusercontent.com/22593928/143661499-0ead319e-1cc9-4a8a-96e6-6c4906fa9ba5.gif)
 
-# Kanban Board BME AUT Témalabor
+# Kanban Board
+
+## Feladat
 
 A konkrét feladat egy teendőket kezelő webalkalmazás backendjének és frontendjének elkészítése. A teendőket adatbázisban tároljuk és a webes felületen jelenítjük meg, a kiszolgáló pedig REST interfészen keresztül érhető el.
 A teendők rendelkeznek címmel, leírással, határidővel és állapottal (függőben, folyamatban, kész, elhalasztva). A határidő helyett a prioritást a teendők sorrendje határozza meg, tehát az előbbi adataik mellett még az egymáshoz képesti sorrendet is tároljuk és megjelenítjük.
 
-## Available Scripts
+## Kliens-oldal
+A repo gyökerében található egy client mappa, ez tartalmazza a react-es alkalmazást:
+### Felhasznált third-party megoldások
 
-In the project directory, you can run:
+* Általános UI design: [MaterialUI](https://mui.com)
+
+* Kártyák mozgatásához drag and drop: [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
+
+* Dátumkezelés: [date-fns](https://date-fns.org)
+
+
+
+### Build
+Developer módban fordítható és futtatható az alkalmazás az alábbi parancsok kiadásával (a client mappába navigálás után):
+
+```
+npm install
+```
+majd
+```
+npm start
+```
+Ekkor meg kell nyílnia egy böngészőablaknak, amiben az alkalmazás fut. Amennyiben nem fut még a szerveroldali alkalmazás mögötte, egy hibaüzenetet kell látnunk
+
+Production módban fordítható az alkalmazás az alábbi parancsok kiadásával (a client mappába navigálás után):
+```
+npm run build
+```
+Ennek eredményeképpen létrejön egy build mappa, aminek a tartalmát a webszerverünk statikus kiszolgáló könyvtárába kell másolnunk.
+
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Komponensek
+A components mappában lévő komponensek rövid ismertetője:
+* **App:** 
+ 
+     A komponens-hierarchiában legfelül helyezkedik el. Ő tárolja a kártyák és oszlopok adatait lokálisan a memóriában, amiket szinkronizál a szerver-oldallal REST-es kérésekkel.
+* **Board:**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+     Tartalmazza az oszlopokat.
+* **Column**:
+    
+     Megjeleníti az oszlop törléséhez, valamint egy új kártya hozzáadásához szükséges button-okat. Tartalmazza a hozzá tartozó kátyákat.
+* **Header**:
+    
+     Megjeleníti a főcímet és az oszlopok hozzáadásához használható gombot.
+* **Task:**
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+     Egy feladatot reprezentál, megjeleníti a feladathoz tartozó adatokat: név, leírás, állapot, határidő. Illetve a hozzá tartózó felhasználói interakciókat biztosító gombokat: törlés, illetve szerkesztés. Utóbbi egy **EditTask** ablakot jelenít meg.
+* Modals
+  * **AddCol:** 
+  
+       Egy modal-módon megjelenő ablak, ami egy szöveges inputot és egy gombot tartalmaz, új oszlopot lehet hozzáadni vele.
+  * **AddTask:** 
+  
+       Egy modal-módon megjelenő ablak, aminek a segítségével új kártyát tudunk létrehozni.
+  * **EditTask:**
+      
+       Egy modal-módon megjelenő ablak, aminek a segítségével egy kártya adatait tudjuk módosítani. Az inputok alapértelmezetten a kárya jelenlegi adatait tartalmazzák.
