@@ -66,3 +66,5 @@ A components mappában lévő komponensek rövid ismertetője:
   * **EditTask:**
       
        Egy modal-módon megjelenő ablak, aminek a segítségével egy kártya adatait tudjuk módosítani. Az inputok alapértelmezetten a kárya jelenlegi adatait tartalmazzák.
+       
+ ## Szerver-oldal
