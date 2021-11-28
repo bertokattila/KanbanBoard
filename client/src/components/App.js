@@ -10,16 +10,25 @@ function App() {
 	const [error, setError] = useState(false);
 	const baseUrl = 'http://localhost:5000';
 
+	const errorCheckJson = (response) => {
+		if (response.ok) {
+			return response.json();
+		} else {
+			throw new Error('Something went wrong');
+		}
+	};
+	const errorCheck = (response) => {
+		if (response.ok) {
+			return response;
+		} else {
+			throw new Error('Something went wrong');
+		}
+	};
+
 	/// initially getting the data from server
 	useEffect(() => {
 		fetch(baseUrl + '/api/column/board/')
-			.then((response) => {
-				if (response.ok) {
-					return response.json();
-				} else {
-					throw new Error('Something went wrong');
-				}
-			})
+			.then((res) => errorCheckJson(res))
 			.then(
 				(board) => {
 					setIsLoaded(true);
@@ -44,13 +53,7 @@ function App() {
 			},
 			body: JSON.stringify({ title: title }),
 		})
-			.then((response) => {
-				if (response.ok) {
-					return response.json();
-				} else {
-					throw new Error('Something went wrong');
-				}
-			})
+			.then((res) => errorCheckJson(res))
 			.then(
 				(column) => {
 					let tmpColumns = columns.slice();
@@ -68,13 +71,7 @@ function App() {
 		fetch(baseUrl + '/api/column/' + columnId, {
 			method: 'DELETE',
 		})
-			.then((response) => {
-				if (response.ok) {
-					return response;
-				} else {
-					throw new Error('Something went wrong');
-				}
-			})
+			.then((res) => errorCheck(res))
 			.then(
 				() => {
 					let tmpColumns = columns.slice();
@@ -103,13 +100,7 @@ function App() {
 				state: state,
 			}),
 		})
-			.then((response) => {
-				if (response.ok) {
-					return response.json();
-				} else {
-					throw new Error('Something went wrong');
-				}
-			})
+			.then((res) => errorCheckJson(res))
 			.then(
 				(card) => {
 					let tmpColumns = columns.slice();
@@ -146,13 +137,7 @@ function App() {
 				state: state,
 			}),
 		})
-			.then((response) => {
-				if (response.ok) {
-					return response.json();
-				} else {
-					throw new Error('Something went wrong');
-				}
-			})
+			.then((res) => errorCheckJson(res))
 			.then(
 				(card) => {
 					if (card.id !== cardId) setError(true);
@@ -180,13 +165,7 @@ function App() {
 		fetch(baseUrl + '/api/card/' + cardId, {
 			method: 'DELETE',
 		})
-			.then((response) => {
-				if (response.ok) {
-					return response;
-				} else {
-					throw new Error('Something went wrong');
-				}
-			})
+			.then((res) => errorCheck(res))
 			.then(
 				(resp) => {
 					if (resp.status === 200) {

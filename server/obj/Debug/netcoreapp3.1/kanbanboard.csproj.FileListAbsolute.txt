@@ -158,5 +158,5 @@
 /Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/2.27b30d26.chunk.js.map
 /Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/runtime-main.89301d50.js
 /Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/runtime-main.89301d50.js.map
-/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/main.35f4e0c9.chunk.js
-/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/main.35f4e0c9.chunk.js.map
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/main.b58430d5.chunk.js
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/main.b58430d5.chunk.js.map
