@@ -41,22 +41,19 @@ Készíthető production build is az alábbi parancsok kiadásával (a client ma
 ```
 npm run build
 ```
-Ennek eredményeképpen létrejön egy build mappa, aminek a tartalmát a webszerverünk statikus kiszolgáló könyvtárába kell másolnunk.
-
-
-
+Ennek eredményeképpen létrejön egy ```build``` mappa, aminek a tartalmát a webszerverünk statikus fájlokat kiszolgáló könyvtárába kell másolnunk.
 
 ### Komponensek
 A komponensek rövid ismertetője:
 * **App:** 
  
-     A komponens-hierarchiában legfelül helyezkedik el. Ő tárolja a kártyák és oszlopok adatait lokálisan a memóriában, amiket szinkronizál a szerver-oldallal REST-es kérésekkel.
+     A komponens-hierarchiában legfelül helyezkedik el. Ő tárolja a kártyák és oszlopok adatait lokálisan a memóriában, amiket REST-es requestek segítségével szinkronizál a szerver-oldallal .
 * **Board:**
 
      Tartalmazza az oszlopokat.
 * **Column**:
     
-     Megjeleníti az oszlop törléséhez, valamint egy új kártya hozzáadásához szükséges button-okat. Tartalmazza a hozzá tartozó kátyákat.
+     Megjeleníti az oszlop törléséhez, valamint egy új kártya hozzáadásához szükséges gombokat. Tartalmazza a hozzá tartozó kátyákat.
 * **Header**:
     
      Megjeleníti a főcímet és az oszlopok hozzáadásához használható gombot.
@@ -66,21 +63,20 @@ A komponensek rövid ismertetője:
 * Modals
   * **AddCol:** 
   
-       Egy modal-módon megjelenő ablak, ami egy szöveges inputot és egy gombot tartalmaz, új oszlopot lehet hozzáadni vele.
+       Egy modal-módon megjeleníthető ablak, ami egy szöveges inputot és egy gombot tartalmaz, új oszlopot lehet hozzáadni vele.
   * **AddTask:** 
   
-       Egy modal-módon megjelenő ablak, aminek a segítségével új kártyát tudunk létrehozni.
+       Egy modal-módon megjeleníthető ablak, aminek a segítségével új kártyát tudunk létrehozni.
   * **EditTask:**
       
-       Egy modal-módon megjelenő ablak, aminek a segítségével egy kártya adatait tudjuk módosítani. Az inputok alapértelmezetten a kárya jelenlegi adatait tartalmazzák.
+       Egy modal-módon megjeleníthető ablak, amivel egy kártya adatait tudjuk módosítani. Az inputok alapértelmezetten a kárya jelenlegi adatait tartalmazzák.
        
  ## Szerver-oldal
-A repo gyökerében található egy server mappa, ez tartalmazza az ASP.NET-es szerveroldali alkalmazást.
-**3.1.414**-es verzójú .NET Core-ra van targetelve.
+A repo gyökerében található egy server mappa, ez tartalmazza az ASP.NET-es szerveroldali alkalmazást. ```3.1.41```-es verzójú .NET Core-ra van targetelve.
 
  ### Adatbázis
 
-Az alkalmazás **Microsoft SQL Server** adatbázist használ. Saját adatbázunkhoz kapcsolatot kell létesíteni, amit egy connection string segítségével tudunk megtenni a következő módon:
+Az alkalmazás a **Microsoft SQL Server** adatbáziskezelőt használja. Saját adatbázunkhoz kapcsolatot kell létesíteni, amit egy connection string segítségével tudunk megtenni a következő módon:
 
 A server mappában hozzunk létre egy **appsettings.json** fájlt a következő tartalommal, ahol a **DefaultConnection** mezőnek a saját connection stringünket adjuk értékül:
 
@@ -106,7 +102,7 @@ A ```Logging``` mező is elhagyható tetszés szerint.
 Ezek után létre kell hoznunk a megfelelő sémát, amit egyszerűen megtehetünk az
 [EF Core command-line tools](https://docs.microsoft.com/en-us/ef/core/cli/) segítségével:
  
-A **server** mappába navigálás után adjuk ki a következő parancsot:
+A ```server``` mappába navigálás után adjuk ki a következő parancsot:
 ```
 dotnet ef database update
 ```
@@ -118,7 +114,7 @@ Ez a server/Migrations mappában lévő előre legenerált osztályok segítség
 ```
 dotnet run
 ```
-Ezek után egy böngészőt megnyitva a ```http://localhost:5000``` címen érhető el.
+Ezek után egy böngészővel a ```http://localhost:5000``` címen érhető el a felhasználói felület. 
 
 Production build készítése pedig az alábbi paranccsal lehetséges:
 
@@ -128,7 +124,7 @@ dotnet publish
 
 Ekkor a ```server/bin/Debug/netcoreapp3.1/publish``` mappába fordul az alkalmazás. Ez egy ún. framework-dependent cross-platform binary, ami nem tartalmazza magát a .net runtime-ot, cserébe platformfüggetlen.
 
-Fontos, hogy a publish mappába ekkor másoljuk be a korábban létrehozott ```appsettings.json``` konfigurációs fájlt.
+Fontos, hogy a ```publish``` mappába másoljuk be a korábban létrehozott ```appsettings.json``` konfigurációs fájlt.
 Ekkor a ```publish``` mappában kiadhatjuk a következő parancsot:
 
 ```
@@ -136,3 +132,8 @@ dotnet kanbanboard.dll
 ```
 Ezzel elindul az alkalmazás.
 
+ ### Unit test
+ 
+ A ```server/test``` könyvtárban Unit-tesztek is találhatóak. Ezeket a [xUnit.net](https://xunit.net) nyílt forráskódú Unit-tesztelő eszközzel készítettem el.
+
+3 db Unit tesztet megírtam, ezek tesztelik az oszlop és kártya létrehozását valamint a kártya szerkesztését.
