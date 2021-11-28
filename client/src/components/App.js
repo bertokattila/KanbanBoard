@@ -13,7 +13,13 @@ function App() {
 	/// initially getting the data from server
 	useEffect(() => {
 		fetch(baseUrl + '/api/column/board/')
-			.then((res) => res.json())
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Something went wrong');
+				}
+			})
 			.then(
 				(board) => {
 					setIsLoaded(true);
@@ -38,7 +44,13 @@ function App() {
 			},
 			body: JSON.stringify({ title: title }),
 		})
-			.then((response) => response.json())
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Something went wrong');
+				}
+			})
 			.then(
 				(column) => {
 					let tmpColumns = columns.slice();
@@ -55,22 +67,26 @@ function App() {
 	const removeCol = (columnId) => {
 		fetch(baseUrl + '/api/column/' + columnId, {
 			method: 'DELETE',
-		}).then(
-			(resp) => {
-				if (resp.status === 200) {
+		})
+			.then((response) => {
+				if (response.ok) {
+					return response;
+				} else {
+					throw new Error('Something went wrong');
+				}
+			})
+			.then(
+				() => {
 					let tmpColumns = columns.slice();
 					const index = tmpColumns.findIndex((item) => item.id === columnId);
 					tmpColumns.splice(index, 1);
 					setColumns(tmpColumns);
-				} else {
+				},
+				(err) => {
+					console.log(err);
 					setError(true);
 				}
-			},
-			(err) => {
-				console.log(err);
-				setError(true);
-			}
-		);
+			);
 	};
 
 	const addCard = (columnId, title, description, deadline, state) => {
@@ -87,7 +103,13 @@ function App() {
 				state: state,
 			}),
 		})
-			.then((response) => response.json())
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Something went wrong');
+				}
+			})
 			.then(
 				(card) => {
 					let tmpColumns = columns.slice();
@@ -125,11 +147,12 @@ function App() {
 			}),
 		})
 			.then((response) => {
-				console.log(response);
-				if (!response.ok) setError(true);
-				return response;
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Something went wrong');
+				}
 			})
-			.then((response) => response.json())
 			.then(
 				(card) => {
 					if (card.id !== cardId) setError(true);
@@ -156,25 +179,35 @@ function App() {
 	const removeCard = (columnId, cardId) => {
 		fetch(baseUrl + '/api/card/' + cardId, {
 			method: 'DELETE',
-		}).then(
-			(resp) => {
-				if (resp.status === 200) {
-					let tmpColumns = columns.slice();
-					const colIndex = tmpColumns.findIndex((item) => item.id === columnId);
-					const index = tmpColumns[colIndex].cards.findIndex(
-						(item) => item.id === cardId
-					);
-					index > -1 && tmpColumns[colIndex].cards.splice(index, 1);
-					setColumns(tmpColumns);
+		})
+			.then((response) => {
+				if (response.ok) {
+					return response;
 				} else {
+					throw new Error('Something went wrong');
+				}
+			})
+			.then(
+				(resp) => {
+					if (resp.status === 200) {
+						let tmpColumns = columns.slice();
+						const colIndex = tmpColumns.findIndex(
+							(item) => item.id === columnId
+						);
+						const index = tmpColumns[colIndex].cards.findIndex(
+							(item) => item.id === cardId
+						);
+						index > -1 && tmpColumns[colIndex].cards.splice(index, 1);
+						setColumns(tmpColumns);
+					} else {
+						setError(true);
+					}
+				},
+				(err) => {
+					console.log(err);
 					setError(true);
 				}
-			},
-			(err) => {
-				console.log(err);
-				setError(true);
-			}
-		);
+			);
 	};
 
 	const cardColSwitch = (result) => {

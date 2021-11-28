@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http;
 
 namespace kanbanboard
 {
@@ -59,7 +61,12 @@ namespace kanbanboard
             {
                 endpoints.MapControllers();
             });
-            app.UseStaticFiles();
+            app.UseDefaultFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider($@"{AppDomain.CurrentDomain.BaseDirectory}/wwwroot"),
+                RequestPath = new PathString("")
+            });
         }
     }
 }

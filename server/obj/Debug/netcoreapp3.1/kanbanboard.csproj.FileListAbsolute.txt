@@ -149,3 +149,14 @@
 /Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/xunit.runner.visualstudio.dotnetcore.testadapter.dll
 /Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/xunit.runner.reporters.netcoreapp10.dll
 /Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/xunit.runner.utility.netcoreapp10.dll
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/.DS_Store
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/asset-manifest.json
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/index.html
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/robots.txt
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/2.27b30d26.chunk.js
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/2.27b30d26.chunk.js.LICENSE.txt
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/2.27b30d26.chunk.js.map
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/runtime-main.89301d50.js
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/runtime-main.89301d50.js.map
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/main.35f4e0c9.chunk.js
+/Users/bertokattila/Documents/Egyetem/Temalab/kanbanboard/server/bin/Debug/netcoreapp3.1/wwwroot/static/js/main.35f4e0c9.chunk.js.map

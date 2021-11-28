@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>  
     <GenerateProgramFile>false</GenerateProgramFile>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 <PropertyGroup>
   <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -13,9 +14,18 @@
   <AnalysisLevel>latest</AnalysisLevel>
 </PropertyGroup>
 
-  
+<ItemGroup>
+    <Content Include="wwwroot\**\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+</ItemGroup>
 
   <ItemGroup>
+  <Content Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+         <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
     <PackageReference Include="dotnet-xunit" Version="2.3.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -34,9 +44,8 @@
      <PrivateAssets>all</PrivateAssets>
    </PackageReference>
 
-    <Content Update="appsettings.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    
   </ItemGroup>
+
 
 </Project>
