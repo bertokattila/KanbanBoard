@@ -43,9 +43,6 @@ npm run build
 ```
 Ennek eredményeképpen létrejön egy build mappa, aminek a tartalmát a webszerverünk statikus kiszolgáló könyvtárába kell másolnunk.
 
-
-
-
 ### Komponensek
 A komponensek rövid ismertetője:
 * **App:** 
@@ -136,3 +133,8 @@ dotnet kanbanboard.dll
 ```
 Ezzel elindul az alkalmazás.
 
+ ### Unit test
+ 
+ A ```server/test``` könyvtárban Unit-tesztek is találhatóak. Ezeket a [xUnit.net](https://xunit.net) nyílt forráskódú Unit-tesztelő eszközzel készítettem el.
+
+3 db Unit tesztet megírtam, ezek tesztelik az oszlop és kártya létrehozását valamint a kártya szerkesztését.
