@@ -1,5 +1,9 @@
 
+
 # Kanban Board
+
+<img width="2544" alt="Screenshot 2021-11-28 at 18 32 52" src="https://user-images.githubusercontent.com/22593928/143779173-37158840-9661-4be0-b587-946a0dcfe3e7.png">
+
 
 ## Feladat
 
@@ -19,6 +23,9 @@ A repo gyökerében található egy client mappa, ez tartalmazza a react-es alka
 
 
 ### Build
+
+Ez a fejezet átugorható, ha nem szeretnénk külön szerveren futtatni a kliensoldalt, mivel a **server/wwwroot** mappában már található egy kész production build, így elég a szerveroldal konfigurációját elvégezni a futtatáshoz.
+
 Developer módban fordítható és futtatható az alkalmazás az alábbi parancsok kiadásával (a client mappába navigálás után):
 
 ```
@@ -30,17 +37,17 @@ npm start
 ```
 Ekkor meg kell nyílnia egy böngészőablaknak, amiben az alkalmazás fut. Amennyiben nem fut még a szerveroldali alkalmazás mögötte, egy hibaüzenetet kell látnunk
 
-Production módban fordítható az alkalmazás az alábbi parancsok kiadásával (a client mappába navigálás után):
+Készíthető production build is az alábbi parancsok kiadásával (a client mappába navigálás után):
 ```
 npm run build
 ```
 Ennek eredményeképpen létrejön egy build mappa, aminek a tartalmát a webszerverünk statikus kiszolgáló könyvtárába kell másolnunk.
 
 
-### `npm start`
+
 
 ### Komponensek
-A components mappában lévő komponensek rövid ismertetője:
+A komponensek rövid ismertetője:
 * **App:** 
  
      A komponens-hierarchiában legfelül helyezkedik el. Ő tárolja a kártyák és oszlopok adatait lokálisan a memóriában, amiket szinkronizál a szerver-oldallal REST-es kérésekkel.
@@ -66,3 +73,66 @@ A components mappában lévő komponensek rövid ismertetője:
   * **EditTask:**
       
        Egy modal-módon megjelenő ablak, aminek a segítségével egy kártya adatait tudjuk módosítani. Az inputok alapértelmezetten a kárya jelenlegi adatait tartalmazzák.
+       
+ ## Szerver-oldal
+A repo gyökerében található egy server mappa, ez tartalmazza az ASP.NET-es szerveroldali alkalmazást.
+**3.1.414**-es verzójú .NET Core-ra van targetelve.
+
+ ### Adatbázis
+
+Az alkalmazás **Microsoft SQL Server** adatbázist használ. Saját adatbázunkhoz kapcsolatot kell létesíteni, amit egy connection string segítségével tudunk megtenni a következő módon:
+
+A server mappában hozzunk létre egy **appsettings.json** fájlt a következő tartalommal, ahol a **DefaultConnection** mezőnek a saját connection stringünket adjuk értékül:
+
+```
+{
+	"ConnectionStrings": {
+		"DefaultConnection": <Sajat connection string>
+	},
+	"Logging": {
+		"LogLevel": {
+			"Default": "Information",
+			"Microsoft": "Warning",
+			"Microsoft.Hosting.Lifetime": "Information",
+			"Microsoft.EntityFrameworkCore.Database.Command": "Information"
+		}
+	},
+	"AllowedHosts": "*"
+}
+```
+Az ```AllowedHosts``` mező a CORS engedélyezéséhez szükséges, ha nem szeretnénk külön szerveren hostolni a kliens-oldalt, akkor elhagyható.
+A ```Logging``` mező is elhagyható tetszés szerint.
+
+Ezek után létre kell hoznunk a megfelelő sémát, amit egyszerűen megtehetünk az
+[EF Core command-line tools](https://docs.microsoft.com/en-us/ef/core/cli/) segítségével:
+ 
+A **server** mappába navigálás után adjuk ki a következő parancsot:
+```
+dotnet ef database update
+```
+Ez a server/Migrations mappában lévő előre legenerált osztályok segítségével létrehozza a szükséges adatbázis sémát.
+
+ ### Build
+ 
+ Miután az adatbázis konfigurálását elvégeztük, fordíthatjuk és futtathatjuk az alkalmazást:
+```
+dotnet run
+```
+Ezek után egy böngészőt megnyitva a ```http://localhost:5000``` címen érhető el.
+
+Production build készítése pedig az alábbi paranccsal lehetséges:
+
+```
+dotnet publish
+```
+
+Ekkor a ```server/bin/Debug/netcoreapp3.1/publish``` mappába fordul az alkalmazás. Ez egy ún. framework-dependent cross-platform binary, ami nem tartalmazza magát a .net runtime-ot, cserébe platformfüggetlen.
+
+Fontos, hogy a publish mappába ekkor másoljuk be a korábban létrehozott ```appsettings.json``` konfigurációs fájlt.
+Ekkor a ```publish``` mappában kiadhatjuk a következő parancsot:
+
+```
+dotnet kanbanboard.dll
+```
+Ezzel elindul az alkalmazás.
+
