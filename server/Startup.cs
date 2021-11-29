@@ -27,10 +27,8 @@ namespace kanbanboard
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddCors();
-
 
             services.AddDbContext<KanbanboardContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -41,7 +39,6 @@ namespace kanbanboard
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,7 +52,6 @@ namespace kanbanboard
                      );
             app.UseHttpsRedirection();
             app.UseRouting();
-
 
             app.UseEndpoints(endpoints =>
             {
