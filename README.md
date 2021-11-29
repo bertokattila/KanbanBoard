@@ -24,7 +24,7 @@ A repo gyökerében található egy client mappa, ez tartalmazza a react-es alka
 
 ### Build
 
-Ez a fejezet átugorható, ha nem szeretnénk külön szerveren futtatni a kliensoldalt, mivel a **server/wwwroot** mappában már található egy kész production build, így elég a szerveroldal konfigurációját elvégezni a futtatáshoz.
+Ez a fejezet átugorható, ha nem szeretnénk külön szerveren futtatni a kliensoldalt, mivel a ```server/wwwroot``` mappában már található egy kész production build, így elég a szerveroldal konfigurációját elvégezni a futtatáshoz.
 
 Developer módban fordítható és futtatható az alkalmazás az alábbi parancsok kiadásával (a client mappába navigálás után):
 
@@ -106,7 +106,7 @@ A ```server``` mappába navigálás után adjuk ki a következő parancsot:
 ```
 dotnet ef database update
 ```
-Ez a server/Migrations mappában lévő előre legenerált osztályok segítségével létrehozza a szükséges adatbázis sémát.
+Ez a ```server/Migrations``` mappában lévő előre legenerált osztályok segítségével létrehozza a szükséges adatbázis sémát.
 
  ### Build
  
@@ -137,3 +137,15 @@ Ezzel elindul az alkalmazás.
  A ```server/test``` könyvtárban Unit-tesztek is találhatóak. Ezeket a [xUnit.net](https://xunit.net) nyílt forráskódú Unit-tesztelő eszközzel készítettem el.
 
 3 db Unit tesztet megírtam, ezek tesztelik az oszlop és kártya létrehozását valamint a kártya szerkesztését.
+
+ ### Architektúra
+ 
+ A webalkalmazás architektúrája a Repository, valamint Dependency Injection tervezési mintákat igyekszik követni.
+
+![Untitled Diagram](https://user-images.githubusercontent.com/22593928/143851018-ef5d7be8-6ff8-421c-967f-499bbd65440c.png)
+
+A kliens **http-request**-eken keresztül kommunikál megfelelő API endpointtal. Az adat DTO-kban utazik, hogy felesleges adatokat ne helyezzünk ki a hálózatra.
+
+A kontrollerek DI formában megkapják a repository-t, ami az adatokon végezhető műveleteket és lekérdezéseket szolgáltatja. A repository pedig DI-vel megkapja a DbContext-et, aminevel eléri az adatbázist.
+
+A repository Entity Framework ORM-mel éri el az adatbázist és Linq-to-Entities queryket implementál.
